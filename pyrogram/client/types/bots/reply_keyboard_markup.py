@@ -49,11 +49,13 @@ class ReplyKeyboardMarkup(PyrogramType):
             select the new language. Other users in the group don't see the keyboard.
     """
 
-    def __init__(self,
-                 keyboard: List[List[Union[KeyboardButton, str]]],
-                 resize_keyboard: bool = None,
-                 one_time_keyboard: bool = None,
-                 selective: bool = None):
+    def __init__(
+        self,
+        keyboard: List[List[Union[KeyboardButton, str]]],
+        resize_keyboard: bool = None,
+        one_time_keyboard: bool = None,
+        selective: bool = None,
+    ):
         super().__init__(None)
 
         self.keyboard = keyboard
@@ -74,20 +76,16 @@ class ReplyKeyboardMarkup(PyrogramType):
             keyboard.append(row)
 
         return ReplyKeyboardMarkup(
-            keyboard=keyboard,
-            resize_keyboard=kb.resize,
-            one_time_keyboard=kb.single_use,
-            selective=kb.selective
+            keyboard=keyboard, resize_keyboard=kb.resize, one_time_keyboard=kb.single_use, selective=kb.selective
         )
 
     def write(self):
         return RawReplyKeyboardMarkup(
-            rows=[KeyboardButtonRow(
-                [KeyboardButton(j).write()
-                 if isinstance(j, str) else j.write()
-                 for j in i]
-            ) for i in self.keyboard],
+            rows=[
+                KeyboardButtonRow([KeyboardButton(j).write() if isinstance(j, str) else j.write() for j in i])
+                for i in self.keyboard
+            ],
             resize=self.resize_keyboard or None,
             single_use=self.one_time_keyboard or None,
-            selective=self.selective or None
+            selective=self.selective or None,
         )

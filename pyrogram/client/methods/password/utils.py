@@ -93,12 +93,7 @@ def compute_check(r: types.account.Password, password: str) -> types.InputCheckP
     K_bytes = sha256(S_bytes)
 
     M1_bytes = sha256(
-        xor(sha256(p_bytes), sha256(g_bytes))
-        + sha256(algo.salt1)
-        + sha256(algo.salt2)
-        + A_bytes
-        + B_bytes
-        + K_bytes
+        xor(sha256(p_bytes), sha256(g_bytes)) + sha256(algo.salt1) + sha256(algo.salt2) + A_bytes + B_bytes + K_bytes
     )
 
     return types.InputCheckPasswordSRP(srp_id, A_bytes, M1_bytes)

@@ -32,6 +32,6 @@ class Bots(
     SendInlineBotResult,
     SendGame,
     SetGameScore,
-    GetGameHighScores
+    GetGameHighScores,
 ):
     pass

@@ -34,11 +34,13 @@ log = logging.getLogger(__name__)
 class SendMediaGroup(BaseClient):
     # TODO: Add progress parameter
     # TODO: Figure out how to send albums using URLs
-    def send_media_group(self,
-                         chat_id: Union[int, str],
-                         media: List[Union["pyrogram.InputMediaPhoto", "pyrogram.InputMediaVideo"]],
-                         disable_notification: bool = None,
-                         reply_to_message_id: int = None):
+    def send_media_group(
+        self,
+        chat_id: Union[int, str],
+        media: List[Union["pyrogram.InputMediaPhoto", "pyrogram.InputMediaVideo"]],
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+    ):
         """Use this method to send a group of photos or videos as an album.
 
         Args:
@@ -78,9 +80,7 @@ class SendMediaGroup(BaseClient):
                             media = self.send(
                                 functions.messages.UploadMedia(
                                     peer=self.resolve_peer(chat_id),
-                                    media=types.InputMediaUploadedPhoto(
-                                        file=self.save_file(i.media)
-                                    )
+                                    media=types.InputMediaUploadedPhoto(file=self.save_file(i.media)),
                                 )
                             )
                         except FloodWait as e:
@@ -90,11 +90,7 @@ class SendMediaGroup(BaseClient):
                             break
 
                     media = types.InputMediaPhoto(
-                        id=types.InputPhoto(
-                            id=media.photo.id,
-                            access_hash=media.photo.access_hash,
-                            file_reference=b""
-                        )
+                        id=types.InputPhoto(id=media.photo.id, access_hash=media.photo.access_hash, file_reference=b"")
                     )
                 else:
                     try:
@@ -113,11 +109,7 @@ class SendMediaGroup(BaseClient):
                                 raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                         media = types.InputMediaPhoto(
-                            id=types.InputPhoto(
-                                id=unpacked[2],
-                                access_hash=unpacked[3],
-                                file_reference=b""
-                            )
+                            id=types.InputPhoto(id=unpacked[2], access_hash=unpacked[3], file_reference=b"")
                         )
             elif isinstance(i, pyrogram.InputMediaVideo):
                 if os.path.exists(i.media):
@@ -135,11 +127,11 @@ class SendMediaGroup(BaseClient):
                                                 supports_streaming=i.supports_streaming or None,
                                                 duration=i.duration,
                                                 w=i.width,
-                                                h=i.height
+                                                h=i.height,
                                             ),
-                                            types.DocumentAttributeFilename(os.path.basename(i.media))
-                                        ]
-                                    )
+                                            types.DocumentAttributeFilename(os.path.basename(i.media)),
+                                        ],
+                                    ),
                                 )
                             )
                         except FloodWait as e:
@@ -150,9 +142,7 @@ class SendMediaGroup(BaseClient):
 
                     media = types.InputMediaDocument(
                         id=types.InputDocument(
-                            id=media.document.id,
-                            access_hash=media.document.access_hash,
-                            file_reference=b""
+                            id=media.document.id, access_hash=media.document.access_hash, file_reference=b""
                         )
                     )
                 else:
@@ -172,20 +162,10 @@ class SendMediaGroup(BaseClient):
                                 raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                         media = types.InputMediaDocument(
-                            id=types.InputDocument(
-                                id=unpacked[2],
-                                access_hash=unpacked[3],
-                                file_reference=b""
-                            )
+                            id=types.InputDocument(id=unpacked[2], access_hash=unpacked[3], file_reference=b"")
                         )
 
-            multi_media.append(
-                types.InputSingleMedia(
-                    media=media,
-                    random_id=self.rnd_id(),
-                    **style.parse(i.caption)
-                )
-            )
+            multi_media.append(types.InputSingleMedia(media=media, random_id=self.rnd_id(), **style.parse(i.caption)))
 
         while True:
             try:
@@ -194,7 +174,7 @@ class SendMediaGroup(BaseClient):
                         peer=self.resolve_peer(chat_id),
                         multi_media=multi_media,
                         silent=disable_notification or None,
-                        reply_to_msg_id=reply_to_message_id
+                        reply_to_msg_id=reply_to_message_id,
                     )
                 )
             except FloodWait as e:
@@ -206,11 +186,13 @@ class SendMediaGroup(BaseClient):
         return pyrogram.Messages._parse(
             self,
             types.messages.Messages(
-                messages=[m.message for m in filter(
-                    lambda u: isinstance(u, (types.UpdateNewMessage, types.UpdateNewChannelMessage)),
-                    r.updates
-                )],
+                messages=[
+                    m.message
+                    for m in filter(
+                        lambda u: isinstance(u, (types.UpdateNewMessage, types.UpdateNewChannelMessage)), r.updates
+                    )
+                ],
                 users=r.users,
-                chats=r.chats
-            )
+                chats=r.chats,
+            ),
         )

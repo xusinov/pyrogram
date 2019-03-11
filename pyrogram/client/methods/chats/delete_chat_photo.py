@@ -23,8 +23,7 @@ from ...ext import BaseClient
 
 
 class DeleteChatPhoto(BaseClient):
-    def delete_chat_photo(self,
-                          chat_id: Union[int, str]) -> bool:
+    def delete_chat_photo(self, chat_id: Union[int, str]) -> bool:
         """Use this method to delete a chat photo.
         Photos can't be changed for private chats.
         You must be an administrator in the chat for this to work and must have the appropriate admin rights.
@@ -47,20 +46,10 @@ class DeleteChatPhoto(BaseClient):
         peer = self.resolve_peer(chat_id)
 
         if isinstance(peer, types.InputPeerChat):
-            self.send(
-                functions.messages.EditChatPhoto(
-                    chat_id=peer.chat_id,
-                    photo=types.InputChatPhotoEmpty()
-                )
-            )
+            self.send(functions.messages.EditChatPhoto(chat_id=peer.chat_id, photo=types.InputChatPhotoEmpty()))
         elif isinstance(peer, types.InputPeerChannel):
-            self.send(
-                functions.channels.EditPhoto(
-                    channel=peer,
-                    photo=types.InputChatPhotoEmpty()
-                )
-            )
+            self.send(functions.channels.EditPhoto(channel=peer, photo=types.InputChatPhotoEmpty()))
         else:
-            raise ValueError("The chat_id \"{}\" belongs to a user".format(chat_id))
+            raise ValueError('The chat_id "{}" belongs to a user'.format(chat_id))
 
         return True

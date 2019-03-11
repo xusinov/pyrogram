@@ -25,13 +25,5 @@ from .password import Password
 from .users import Users
 
 
-class Methods(
-    Bots,
-    Contacts,
-    Password,
-    Chats,
-    Users,
-    Messages,
-    Decorators
-):
+class Methods(Bots, Contacts, Password, Chats, Users, Messages, Decorators):
     pass

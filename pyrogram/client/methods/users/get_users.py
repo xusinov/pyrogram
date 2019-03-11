@@ -24,8 +24,7 @@ from ...ext import BaseClient
 
 
 class GetUsers(BaseClient):
-    def get_users(self,
-                  user_ids: Iterable[Union[int, str]]) -> Union["pyrogram.User", List["pyrogram.User"]]:
+    def get_users(self, user_ids: Iterable[Union[int, str]]) -> Union["pyrogram.User", List["pyrogram.User"]]:
         """Use this method to get information about a user.
         You can retrieve up to 200 users at once.
 
@@ -47,11 +46,7 @@ class GetUsers(BaseClient):
         user_ids = list(user_ids) if is_iterable else [user_ids]
         user_ids = [self.resolve_peer(i) for i in user_ids]
 
-        r = self.send(
-            functions.users.GetUsers(
-                id=user_ids
-            )
-        )
+        r = self.send(functions.users.GetUsers(id=user_ids))
 
         users = []
 

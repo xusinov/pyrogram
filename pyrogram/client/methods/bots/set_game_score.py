@@ -24,13 +24,15 @@ from pyrogram.client.ext import BaseClient
 
 
 class SetGameScore(BaseClient):
-    def set_game_score(self,
-                       user_id: Union[int, str],
-                       score: int,
-                       force: bool = None,
-                       disable_edit_message: bool = None,
-                       chat_id: Union[int, str] = None,
-                       message_id: int = None):
+    def set_game_score(
+        self,
+        user_id: Union[int, str],
+        score: int,
+        force: bool = None,
+        disable_edit_message: bool = None,
+        chat_id: Union[int, str] = None,
+        message_id: int = None,
+    ):
         # inline_message_id: str = None):  TODO Add inline_message_id
         """Use this method to set the score of the specified user in a game.
 
@@ -75,16 +77,12 @@ class SetGameScore(BaseClient):
                 id=message_id,
                 user_id=self.resolve_peer(user_id),
                 force=force or None,
-                edit_message=not disable_edit_message or None
+                edit_message=not disable_edit_message or None,
             )
         )
 
         for i in r.updates:
             if isinstance(i, (types.UpdateEditMessage, types.UpdateEditChannelMessage)):
-                return pyrogram.Message._parse(
-                    self, i.message,
-                    {i.id: i for i in r.users},
-                    {i.id: i for i in r.chats}
-                )
+                return pyrogram.Message._parse(self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats})
 
         return True

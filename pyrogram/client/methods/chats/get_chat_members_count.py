@@ -23,8 +23,7 @@ from ...ext import BaseClient
 
 
 class GetChatMembersCount(BaseClient):
-    def get_chat_members_count(self,
-                               chat_id: Union[int, str]) -> int:
+    def get_chat_members_count(self, chat_id: Union[int, str]) -> int:
         """Use this method to get the number of members in a chat.
 
         Args:
@@ -41,16 +40,8 @@ class GetChatMembersCount(BaseClient):
         peer = self.resolve_peer(chat_id)
 
         if isinstance(peer, types.InputPeerChat):
-            return self.send(
-                functions.messages.GetChats(
-                    id=[peer.chat_id]
-                )
-            ).chats[0].participants_count
+            return self.send(functions.messages.GetChats(id=[peer.chat_id])).chats[0].participants_count
         elif isinstance(peer, types.InputPeerChannel):
-            return self.send(
-                functions.channels.GetFullChannel(
-                    channel=peer
-                )
-            ).full_chat.participants_count
+            return self.send(functions.channels.GetFullChannel(channel=peer)).full_chat.participants_count
         else:
-            raise ValueError("The chat_id \"{}\" belongs to a user".format(chat_id))
+            raise ValueError('The chat_id "{}" belongs to a user'.format(chat_id))

@@ -56,7 +56,8 @@ class HTML:
 
                     entity = (
                         Mention(start, len(body), input_user)
-                        if input_user else MentionInvalid(start, len(body), user_id)
+                        if input_user
+                        else MentionInvalid(start, len(body), user_id)
                     )
                 else:
                     entity = Url(start, len(body), url)
@@ -77,10 +78,7 @@ class HTML:
             offset += len(style) * 2 + 5 + (len(url) + 8 if url else 0)
 
         # TODO: OrderedDict to be removed in Python3.6
-        return OrderedDict([
-            ("message", utils.remove_surrogates(message)),
-            ("entities", entities)
-        ])
+        return OrderedDict([("message", utils.remove_surrogates(message)), ("entities", entities)])
 
     def unparse(self, message: str, entities: list):
         message = utils.add_surrogates(message).strip()
@@ -91,7 +89,7 @@ class HTML:
             type = entity.type
             url = entity.url
             user = entity.user
-            sub = message[start: start + entity.length]
+            sub = message[start : start + entity.length]
 
             if type == "bold":
                 style = "b"
@@ -103,19 +101,18 @@ class HTML:
                 style = "pre"
             elif type == "text_link":
                 offset += 15 + len(url)
-                message = message[:start] + message[start:].replace(
-                    sub, "<a href=\"{}\">{}</a>".format(url, sub), 1)
+                message = message[:start] + message[start:].replace(sub, '<a href="{}">{}</a>'.format(url, sub), 1)
                 continue
             elif type == "text_mention":
                 offset += 28 + len(str(user.id))
                 message = message[:start] + message[start:].replace(
-                    sub, "<a href=\"tg://user?id={}\">{}</a>".format(user.id, sub), 1)
+                    sub, '<a href="tg://user?id={}">{}</a>'.format(user.id, sub), 1
+                )
                 continue
             else:
                 continue
 
             offset += len(style) * 2 + 5
-            message = message[:start] + message[start:].replace(
-                sub, "<{0}>{1}</{0}>".format(style, sub), 1)
+            message = message[:start] + message[start:].replace(sub, "<{0}>{1}</{0}>".format(style, sub), 1)
 
         return utils.remove_surrogates(message)

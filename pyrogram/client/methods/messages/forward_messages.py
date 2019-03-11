@@ -24,11 +24,13 @@ from ...ext import BaseClient
 
 
 class ForwardMessages(BaseClient):
-    def forward_messages(self,
-                         chat_id: Union[int, str],
-                         from_chat_id: Union[int, str],
-                         message_ids: Iterable[int],
-                         disable_notification: bool = None) -> "pyrogram.Messages":
+    def forward_messages(
+        self,
+        chat_id: Union[int, str],
+        from_chat_id: Union[int, str],
+        message_ids: Iterable[int],
+        disable_notification: bool = None,
+    ) -> "pyrogram.Messages":
         """Use this method to forward messages of any kind.
 
         Args:
@@ -68,7 +70,7 @@ class ForwardMessages(BaseClient):
                 from_peer=self.resolve_peer(from_chat_id),
                 id=message_ids,
                 silent=disable_notification or None,
-                random_id=[self.rnd_id() for _ in message_ids]
+                random_id=[self.rnd_id() for _ in message_ids],
             )
         )
 
@@ -79,15 +81,8 @@ class ForwardMessages(BaseClient):
 
         for i in r.updates:
             if isinstance(i, (types.UpdateNewMessage, types.UpdateNewChannelMessage)):
-                messages.append(
-                    pyrogram.Message._parse(
-                        self, i.message,
-                        users, chats
-                    )
-                )
+                messages.append(pyrogram.Message._parse(self, i.message, users, chats))
 
-        return pyrogram.Messages(
-            client=self,
-            total_count=len(messages),
-            messages=messages
-        ) if is_iterable else messages[0]
+        return (
+            pyrogram.Messages(client=self, total_count=len(messages), messages=messages) if is_iterable else messages[0]
+        )

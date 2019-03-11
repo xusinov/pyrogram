@@ -23,9 +23,7 @@ from ...ext import BaseClient
 
 
 class LeaveChat(BaseClient):
-    def leave_chat(self,
-                   chat_id: Union[int, str],
-                   delete: bool = False):
+    def leave_chat(self, chat_id: Union[int, str], delete: bool = False):
         """Use this method to leave a group chat or channel.
 
         Args:
@@ -42,25 +40,11 @@ class LeaveChat(BaseClient):
         peer = self.resolve_peer(chat_id)
 
         if isinstance(peer, types.InputPeerChannel):
-            return self.send(
-                functions.channels.LeaveChannel(
-                    channel=self.resolve_peer(chat_id)
-                )
-            )
+            return self.send(functions.channels.LeaveChannel(channel=self.resolve_peer(chat_id)))
         elif isinstance(peer, types.InputPeerChat):
-            r = self.send(
-                functions.messages.DeleteChatUser(
-                    chat_id=peer.chat_id,
-                    user_id=types.InputPeerSelf()
-                )
-            )
+            r = self.send(functions.messages.DeleteChatUser(chat_id=peer.chat_id, user_id=types.InputPeerSelf()))
 
             if delete:
-                self.send(
-                    functions.messages.DeleteHistory(
-                        peer=peer,
-                        max_id=0
-                    )
-                )
+                self.send(functions.messages.DeleteHistory(peer=peer, max_id=0))
 
             return r

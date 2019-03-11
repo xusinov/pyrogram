@@ -16,10 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from pyrogram.api.types import (
-    KeyboardButtonUrl, KeyboardButtonCallback,
-    KeyboardButtonSwitchInline, KeyboardButtonGame
-)
+from pyrogram.api.types import KeyboardButtonUrl, KeyboardButtonCallback, KeyboardButtonSwitchInline, KeyboardButtonGame
 from .callback_game import CallbackGame
 from ..pyrogram_type import PyrogramType
 
@@ -54,13 +51,15 @@ class InlineKeyboardButton(PyrogramType):
 
     # TODO: Add callback_game and pay fields
 
-    def __init__(self,
-                 text: str,
-                 callback_data: bytes = None,
-                 url: str = None,
-                 switch_inline_query: str = None,
-                 switch_inline_query_current_chat: str = None,
-                 callback_game: CallbackGame = None):
+    def __init__(
+        self,
+        text: str,
+        callback_data: bytes = None,
+        url: str = None,
+        switch_inline_query: str = None,
+        switch_inline_query_current_chat: str = None,
+        callback_game: CallbackGame = None,
+    ):
         super().__init__(None)
 
         self.text = str(text)
@@ -74,34 +73,19 @@ class InlineKeyboardButton(PyrogramType):
     @staticmethod
     def read(o):
         if isinstance(o, KeyboardButtonUrl):
-            return InlineKeyboardButton(
-                text=o.text,
-                url=o.url
-            )
+            return InlineKeyboardButton(text=o.text, url=o.url)
 
         if isinstance(o, KeyboardButtonCallback):
-            return InlineKeyboardButton(
-                text=o.text,
-                callback_data=o.data
-            )
+            return InlineKeyboardButton(text=o.text, callback_data=o.data)
 
         if isinstance(o, KeyboardButtonSwitchInline):
             if o.same_peer:
-                return InlineKeyboardButton(
-                    text=o.text,
-                    switch_inline_query_current_chat=o.query
-                )
+                return InlineKeyboardButton(text=o.text, switch_inline_query_current_chat=o.query)
             else:
-                return InlineKeyboardButton(
-                    text=o.text,
-                    switch_inline_query=o.query
-                )
+                return InlineKeyboardButton(text=o.text, switch_inline_query=o.query)
 
         if isinstance(o, KeyboardButtonGame):
-            return InlineKeyboardButton(
-                text=o.text,
-                callback_game=CallbackGame()
-            )
+            return InlineKeyboardButton(text=o.text, callback_game=CallbackGame())
 
     def write(self):
         if self.callback_data:

@@ -37,12 +37,7 @@ class GameHighScore(PyrogramType):
             Position in high score table for the game.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 user: User,
-                 score: int,
-                 position: int = None):
+    def __init__(self, *, client: "pyrogram.client.ext.BaseClient", user: User, score: int, position: int = None):
         super().__init__(client)
 
         self.user = user
@@ -57,13 +52,11 @@ class GameHighScore(PyrogramType):
             user=User._parse(client, users[game_high_score.user_id]),
             score=game_high_score.score,
             position=game_high_score.pos,
-            client=client
+            client=client,
         )
 
     @staticmethod
     def _parse_action(client, service: types.MessageService, users: dict):
         return GameHighScore(
-            user=User._parse(client, users[service.from_id]),
-            score=service.action.score,
-            client=client
+            user=User._parse(client, users[service.from_id]), score=service.action.score, client=client
         )

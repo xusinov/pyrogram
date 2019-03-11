@@ -51,16 +51,18 @@ class VideoNote(PyrogramType):
             Date the video note was sent in Unix time.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 file_id: str,
-                 length: int,
-                 duration: int,
-                 thumb: PhotoSize = None,
-                 mime_type: str = None,
-                 file_size: int = None,
-                 date: int = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        file_id: str,
+        length: int,
+        duration: int,
+        thumb: PhotoSize = None,
+        mime_type: str = None,
+        file_size: int = None,
+        date: int = None
+    ):
         super().__init__(client)
 
         self.file_id = file_id
@@ -74,20 +76,12 @@ class VideoNote(PyrogramType):
     @staticmethod
     def _parse(client, video_note: types.Document, video_attributes: types.DocumentAttributeVideo) -> "VideoNote":
         return VideoNote(
-            file_id=encode(
-                pack(
-                    "<iiqq",
-                    13,
-                    video_note.dc_id,
-                    video_note.id,
-                    video_note.access_hash
-                )
-            ),
+            file_id=encode(pack("<iiqq", 13, video_note.dc_id, video_note.id, video_note.access_hash)),
             length=video_attributes.w,
             duration=video_attributes.duration,
             thumb=PhotoSize._parse(client, video_note.thumb),
             file_size=video_note.size,
             mime_type=video_note.mime_type,
             date=video_note.date,
-            client=client
+            client=client,
         )

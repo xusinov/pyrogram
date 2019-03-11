@@ -34,11 +34,7 @@ class UserProfilePhotos(PyrogramType):
             Requested profile pictures.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 total_count: int,
-                 photos: List[Photo]):
+    def __init__(self, *, client: "pyrogram.client.ext.BaseClient", total_count: int, photos: List[Photo]):
         super().__init__(client)
 
         self.total_count = total_count
@@ -49,5 +45,5 @@ class UserProfilePhotos(PyrogramType):
         return UserProfilePhotos(
             total_count=getattr(photos, "count", len(photos.photos)),
             photos=[Photo._parse(client, photo) for photo in photos.photos],
-            client=client
+            client=client,
         )

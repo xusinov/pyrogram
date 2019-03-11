@@ -28,10 +28,7 @@ log = logging.getLogger(__name__)
 
 
 class GetDialogs(BaseClient):
-    def get_dialogs(self,
-                    offset_date: int = 0,
-                    limit: int = 100,
-                    pinned_only: bool = False) -> "pyrogram.Dialogs":
+    def get_dialogs(self, offset_date: int = 0, limit: int = 100, pinned_only: bool = False) -> "pyrogram.Dialogs":
         """Use this method to get a chunk of the user's dialogs
 
         You can get up to 100 dialogs at once.
@@ -69,7 +66,7 @@ class GetDialogs(BaseClient):
                             offset_peer=types.InputPeerEmpty(),
                             limit=limit,
                             hash=0,
-                            exclude_pinned=True
+                            exclude_pinned=True,
                         )
                     )
             except FloodWait as e:

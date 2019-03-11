@@ -58,16 +58,18 @@ class CallbackQuery(PyrogramType, Update):
 
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 id: str,
-                 from_user: User,
-                 chat_instance: str,
-                 message: "pyrogram.Message" = None,
-                 inline_message_id: str = None,
-                 data: bytes = None,
-                 game_short_name: str = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        id: str,
+        from_user: User,
+        chat_instance: str,
+        message: "pyrogram.Message" = None,
+        inline_message_id: str = None,
+        data: bytes = None,
+        game_short_name: str = None
+    ):
         super().__init__(client)
 
         self.id = id
@@ -95,15 +97,16 @@ class CallbackQuery(PyrogramType, Update):
 
             message = client.get_messages(peer_id, callback_query.msg_id)
         elif isinstance(callback_query, types.UpdateInlineBotCallbackQuery):
-            inline_message_id = b64encode(
-                pack(
-                    "<iqq",
-                    callback_query.msg_id.dc_id,
-                    callback_query.msg_id.id,
-                    callback_query.msg_id.access_hash
-                ),
-                b"-_"
-            ).decode().rstrip("=")
+            inline_message_id = (
+                b64encode(
+                    pack(
+                        "<iqq", callback_query.msg_id.dc_id, callback_query.msg_id.id, callback_query.msg_id.access_hash
+                    ),
+                    b"-_",
+                )
+                .decode()
+                .rstrip("=")
+            )
 
         return CallbackQuery(
             id=str(callback_query.query_id),
@@ -113,7 +116,7 @@ class CallbackQuery(PyrogramType, Update):
             chat_instance=str(callback_query.chat_instance),
             data=callback_query.data,
             game_short_name=callback_query.game_short_name,
-            client=client
+            client=client,
         )
 
     def answer(self, text: str = None, show_alert: bool = None, url: str = None, cache_time: int = 0):
@@ -153,9 +156,5 @@ class CallbackQuery(PyrogramType, Update):
                 Telegram apps will support caching starting in version 3.14. Defaults to 0.
         """
         return self._client.answer_callback_query(
-            callback_query_id=self.id,
-            text=text,
-            show_alert=show_alert,
-            url=url,
-            cache_time=cache_time
+            callback_query_id=self.id, text=text, show_alert=show_alert, url=url, cache_time=cache_time
         )

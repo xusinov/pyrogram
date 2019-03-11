@@ -21,12 +21,9 @@ from pyrogram.client.ext import BaseClient
 
 
 class AnswerCallbackQuery(BaseClient):
-    def answer_callback_query(self,
-                              callback_query_id: str,
-                              text: str = None,
-                              show_alert: bool = None,
-                              url: str = None,
-                              cache_time: int = 0):
+    def answer_callback_query(
+        self, callback_query_id: str, text: str = None, show_alert: bool = None, url: str = None, cache_time: int = 0
+    ):
         """Use this method to send answers to callback queries sent from inline keyboards.
         The answer will be displayed to the user as a notification at the top of the chat screen or as an alert.
 
@@ -59,10 +56,6 @@ class AnswerCallbackQuery(BaseClient):
         """
         return self.send(
             functions.messages.SetBotCallbackAnswer(
-                query_id=int(callback_query_id),
-                cache_time=cache_time,
-                alert=show_alert or None,
-                message=text,
-                url=url
+                query_id=int(callback_query_id), cache_time=cache_time, alert=show_alert or None, message=text, url=url
             )
         )

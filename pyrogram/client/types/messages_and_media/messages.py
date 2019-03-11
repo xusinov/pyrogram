@@ -37,11 +37,7 @@ class Messages(PyrogramType, Update):
             Requested messages.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 total_count: int,
-                 messages: List[Message]):
+    def __init__(self, *, client: "pyrogram.client.ext.BaseClient", total_count: int, messages: List[Message]):
         super().__init__(client)
 
         self.total_count = total_count
@@ -55,11 +51,7 @@ class Messages(PyrogramType, Update):
         total_count = getattr(messages, "count", len(messages.messages))
 
         if not messages.messages:
-            return Messages(
-                total_count=total_count,
-                messages=[],
-                client=client
-            )
+            return Messages(total_count=total_count, messages=[], client=client)
 
         parsed_messages = [Message._parse(client, message, users, chats, replies=0) for message in messages.messages]
 
@@ -69,9 +61,7 @@ class Messages(PyrogramType, Update):
 
             if reply_message_ids:
                 reply_messages = client.get_messages(
-                    parsed_messages[0].chat.id,
-                    reply_to_message_ids=reply_message_ids,
-                    replies=0
+                    parsed_messages[0].chat.id, reply_to_message_ids=reply_message_ids, replies=0
                 ).messages
 
                 for message in parsed_messages:
@@ -81,11 +71,7 @@ class Messages(PyrogramType, Update):
                         if reply.message_id == reply_id:
                             message.reply_to_message = reply
 
-        return Messages(
-            total_count=total_count,
-            messages=parsed_messages,
-            client=client
-        )
+        return Messages(total_count=total_count, messages=parsed_messages, client=client)
 
     @staticmethod
     def _parse_deleted(client, update) -> "Messages":
@@ -98,17 +84,11 @@ class Messages(PyrogramType, Update):
             parsed_messages.append(
                 Message(
                     message_id=message,
-                    chat=Chat(
-                        id=int("-100" + str(channel_id)),
-                        type="channel",
-                        client=client
-                    ) if channel_id is not None else None,
-                    client=client
+                    chat=Chat(id=int("-100" + str(channel_id)), type="channel", client=client)
+                    if channel_id is not None
+                    else None,
+                    client=client,
                 )
             )
 
-        return Messages(
-            total_count=len(parsed_messages),
-            messages=parsed_messages,
-            client=client
-        )
+        return Messages(total_count=len(parsed_messages), messages=parsed_messages, client=client)

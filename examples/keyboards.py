@@ -21,10 +21,10 @@ with app:
                 ["A", "B", "C", "D"],  # First row
                 ["E", "F", "G"],  # Second row
                 ["H", "I"],  # Third row
-                ["J"]  # Fourth row
+                ["J"],  # Fourth row
             ],
-            resize_keyboard=True  # Make the keyboard smaller
-        )
+            resize_keyboard=True,  # Make the keyboard smaller
+        ),
     )
 
     app.send_message(
@@ -33,27 +33,18 @@ with app:
         reply_markup=InlineKeyboardMarkup(
             [
                 [  # First row
-
                     InlineKeyboardButton(  # Generates a callback query when pressed
-                        "Button",
-                        callback_data=b"data"
+                        "Button", callback_data=b"data"
                     ),  # Note how callback_data must be bytes
-                    InlineKeyboardButton(  # Opens a web URL
-                        "URL",
-                        url="https://docs.pyrogram.ml"
-                    ),
+                    InlineKeyboardButton("URL", url="https://docs.pyrogram.ml"),  # Opens a web URL
                 ],
                 [  # Second row
                     # Opens the inline interface
-                    InlineKeyboardButton(
-                        "Choose chat",
-                        switch_inline_query="pyrogram"
-                    ),
+                    InlineKeyboardButton("Choose chat", switch_inline_query="pyrogram"),
                     InlineKeyboardButton(  # Opens the inline interface in the current chat
-                        "Inline here",
-                        switch_inline_query_current_chat="pyrogram"
-                    )
-                ]
+                        "Inline here", switch_inline_query_current_chat="pyrogram"
+                    ),
+                ],
             ]
-        )
+        ),
     )

@@ -45,14 +45,16 @@ class ChatPreview(PyrogramType):
             Preview of some of the chat members.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 title: str,
-                 photo: ChatPhoto,
-                 type: str,
-                 members_count: int,
-                 members: List[User] = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        title: str,
+        photo: ChatPhoto,
+        type: str,
+        members_count: int,
+        members: List[User] = None
+    ):
         super().__init__(client)
 
         self.title = title
@@ -66,12 +68,10 @@ class ChatPreview(PyrogramType):
         return ChatPreview(
             title=chat_invite.title,
             photo=ChatPhoto._parse(client, chat_invite.photo),
-            type=("group" if not chat_invite.channel else
-                  "channel" if chat_invite.broadcast else
-                  "supergroup"),
+            type=("group" if not chat_invite.channel else "channel" if chat_invite.broadcast else "supergroup"),
             members_count=chat_invite.participants_count,
             members=[User._parse(client, user) for user in chat_invite.participants] or None,
-            client=client
+            client=client,
         )
 
     # TODO: Maybe just merge this object into Chat itself by adding the "members" field.

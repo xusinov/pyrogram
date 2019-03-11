@@ -26,9 +26,7 @@ from ...ext import BaseClient
 
 
 class SetChatPhoto(BaseClient):
-    def set_chat_photo(self,
-                       chat_id: Union[int, str],
-                       photo: str) -> bool:
+    def set_chat_photo(self, chat_id: Union[int, str], photo: str) -> bool:
         """Use this method to set a new profile photo for the chat.
         Photos can't be changed for private chats.
         You must be an administrator in the chat for this to work and must have the appropriate admin rights.
@@ -58,29 +56,13 @@ class SetChatPhoto(BaseClient):
         else:
             s = unpack("<qq", b64decode(photo + "=" * (-len(photo) % 4), "-_"))
 
-            photo = types.InputChatPhoto(
-                id=types.InputPhoto(
-                    id=s[0],
-                    access_hash=s[1],
-                    file_reference=b""
-                )
-            )
+            photo = types.InputChatPhoto(id=types.InputPhoto(id=s[0], access_hash=s[1], file_reference=b""))
 
         if isinstance(peer, types.InputPeerChat):
-            self.send(
-                functions.messages.EditChatPhoto(
-                    chat_id=peer.chat_id,
-                    photo=photo
-                )
-            )
+            self.send(functions.messages.EditChatPhoto(chat_id=peer.chat_id, photo=photo))
         elif isinstance(peer, types.InputPeerChannel):
-            self.send(
-                functions.channels.EditPhoto(
-                    channel=peer,
-                    photo=photo
-                )
-            )
+            self.send(functions.channels.EditPhoto(channel=peer, photo=photo))
         else:
-            raise ValueError("The chat_id \"{}\" belongs to a user".format(chat_id))
+            raise ValueError('The chat_id "{}" belongs to a user'.format(chat_id))
 
         return True

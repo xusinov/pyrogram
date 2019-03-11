@@ -24,8 +24,7 @@ from ...ext import BaseClient
 
 
 class AddContacts(BaseClient):
-    def add_contacts(self,
-                     contacts: List["pyrogram.InputPhoneContact"]):
+    def add_contacts(self, contacts: List["pyrogram.InputPhoneContact"]):
         """Use this method to add contacts to your Telegram address book.
 
         Args:
@@ -38,10 +37,6 @@ class AddContacts(BaseClient):
         Raises:
             :class:`Error <pyrogram.Error>` in case of a Telegram RPC error.
         """
-        imported_contacts = self.send(
-            functions.contacts.ImportContacts(
-                contacts=contacts
-            )
-        )
+        imported_contacts = self.send(functions.contacts.ImportContacts(contacts=contacts))
 
         return imported_contacts

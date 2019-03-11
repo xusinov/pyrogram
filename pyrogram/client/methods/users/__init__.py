@@ -24,12 +24,5 @@ from .set_user_profile_photo import SetUserProfilePhoto
 from .update_username import UpdateUsername
 
 
-class Users(
-    GetUserProfilePhotos,
-    SetUserProfilePhoto,
-    DeleteUserProfilePhotos,
-    GetUsers,
-    GetMe,
-    UpdateUsername
-):
+class Users(GetUserProfilePhotos, SetUserProfilePhoto, DeleteUserProfilePhotos, GetUsers, GetMe, UpdateUsername):
     pass

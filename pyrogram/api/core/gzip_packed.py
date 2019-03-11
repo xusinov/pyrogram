@@ -24,7 +24,7 @@ from .primitives import Int, Bytes
 
 
 class GzipPacked(Object):
-    ID = 0x3072cfa1
+    ID = 0x3072CFA1
 
     def __init__(self, packed_data: Object):
         self.packed_data = packed_data
@@ -32,25 +32,13 @@ class GzipPacked(Object):
     @staticmethod
     def read(b: BytesIO, *args) -> "GzipPacked":
         # Return the Object itself instead of a GzipPacked wrapping it
-        return Object.read(
-            BytesIO(
-                decompress(
-                    Bytes.read(b)
-                )
-            )
-        )
+        return Object.read(BytesIO(decompress(Bytes.read(b))))
 
     def write(self) -> bytes:
         b = BytesIO()
 
         b.write(Int(self.ID, False))
 
-        b.write(
-            Bytes(
-                compress(
-                    self.packed_data.write()
-                )
-            )
-        )
+        b.write(Bytes(compress(self.packed_data.write())))
 
         return b.getvalue()

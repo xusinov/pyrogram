@@ -22,8 +22,7 @@ from ...ext import BaseClient
 
 
 class GetChatPreview(BaseClient):
-    def get_chat_preview(self,
-                         invite_link: str):
+    def get_chat_preview(self, invite_link: str):
         """Use this method to get the preview of a chat using the invite link.
 
         This method only returns a chat preview, if you want to join a chat use :meth:`join_chat`
@@ -42,11 +41,7 @@ class GetChatPreview(BaseClient):
         match = self.INVITE_LINK_RE.match(invite_link)
 
         if match:
-            r = self.send(
-                functions.messages.CheckChatInvite(
-                    hash=match.group(1)
-                )
-            )
+            r = self.send(functions.messages.CheckChatInvite(hash=match.group(1)))
 
             if isinstance(r, types.ChatInvite):
                 return pyrogram.ChatPreview._parse(self, r)

@@ -74,6 +74,6 @@ class Messages(
     ClosePoll,
     RetractVote,
     DownloadMedia,
-    IterHistory
+    IterHistory,
 ):
     pass

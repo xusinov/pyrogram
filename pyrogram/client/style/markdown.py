@@ -26,7 +26,7 @@ from pyrogram.api.types import (
     MessageEntityTextUrl as Url,
     MessageEntityPre as Pre,
     MessageEntityMentionName as MentionInvalid,
-    InputMessageEntityMentionName as Mention
+    InputMessageEntityMentionName as Mention,
 )
 from . import utils
 
@@ -37,19 +37,19 @@ class Markdown:
     CODE_DELIMITER = "`"
     PRE_DELIMITER = "```"
 
-    MARKDOWN_RE = re.compile(r"({d})([\w\W]*?)\1|\[([^[]+?)\]\(([^(]+?)\)".format(
-        d="|".join(
-            ["".join(i) for i in [
-                ["\{}".format(j) for j in i]
-                for i in [
-                    PRE_DELIMITER,
-                    CODE_DELIMITER,
-                    ITALIC_DELIMITER,
-                    BOLD_DELIMITER
+    MARKDOWN_RE = re.compile(
+        r"({d})([\w\W]*?)\1|\[([^[]+?)\]\(([^(]+?)\)".format(
+            d="|".join(
+                [
+                    "".join(i)
+                    for i in [
+                        ["\{}".format(j) for j in i]
+                        for i in [PRE_DELIMITER, CODE_DELIMITER, ITALIC_DELIMITER, BOLD_DELIMITER]
+                    ]
                 ]
-            ]]
+            )
         )
-    ))
+    )
     MENTION_RE = re.compile(r"tg://user\?id=(\d+)")
 
     def __init__(self, peers_by_id: dict):
@@ -99,10 +99,7 @@ class Markdown:
             message = message.replace(match.group(), body)
 
         # TODO: OrderedDict to be removed in Python3.6
-        return OrderedDict([
-            ("message", utils.remove_surrogates(message)),
-            ("entities", entities)
-        ])
+        return OrderedDict([("message", utils.remove_surrogates(message)), ("entities", entities)])
 
     def unparse(self, message: str, entities: list):
         message = utils.add_surrogates(message).strip()
@@ -113,7 +110,7 @@ class Markdown:
             type = entity.type
             url = entity.url
             user = entity.user
-            sub = message[start: start + entity.length]
+            sub = message[start : start + entity.length]
 
             if type == "bold":
                 style = self.BOLD_DELIMITER
@@ -125,19 +122,18 @@ class Markdown:
                 style = self.PRE_DELIMITER
             elif type == "text_link":
                 offset += 4 + len(url)
-                message = message[:start] + message[start:].replace(
-                    sub, "[{}]({})".format(sub, url), 1)
+                message = message[:start] + message[start:].replace(sub, "[{}]({})".format(sub, url), 1)
                 continue
             elif type == "text_mention":
                 offset += 17 + len(str(user.id))
                 message = message[:start] + message[start:].replace(
-                    sub, "[{}](tg://user?id={})".format(sub, user.id), 1)
+                    sub, "[{}](tg://user?id={})".format(sub, user.id), 1
+                )
                 continue
             else:
                 continue
 
             offset += len(style) * 2
-            message = message[:start] + message[start:].replace(
-                sub, "{0}{1}{0}".format(style, sub), 1)
+            message = message[:start] + message[start:].replace(sub, "{0}{1}{0}".format(style, sub), 1)
 
         return utils.remove_surrogates(message)

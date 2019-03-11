@@ -17,21 +17,45 @@
 # along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from .bots import (
-    CallbackQuery, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup,
-    KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, CallbackGame,
-    GameHighScore, GameHighScores
+    CallbackQuery,
+    ForceReply,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    KeyboardButton,
+    ReplyKeyboardMarkup,
+    ReplyKeyboardRemove,
+    CallbackGame,
+    GameHighScore,
+    GameHighScores,
 )
 from .input_media import (
-    InputMediaAudio, InputPhoneContact, InputMediaVideo, InputMediaPhoto,
-    InputMediaDocument, InputMediaAnimation
+    InputMediaAudio,
+    InputPhoneContact,
+    InputMediaVideo,
+    InputMediaPhoto,
+    InputMediaDocument,
+    InputMediaAnimation,
 )
 from .messages_and_media import (
-    Audio, Contact, Document, Animation, Location, Photo, PhotoSize,
-    Sticker, Venue, Video, VideoNote, Voice, UserProfilePhotos,
-    Message, Messages, MessageEntity, Poll, PollOption, Game
+    Audio,
+    Contact,
+    Document,
+    Animation,
+    Location,
+    Photo,
+    PhotoSize,
+    Sticker,
+    Venue,
+    Video,
+    VideoNote,
+    Voice,
+    UserProfilePhotos,
+    Message,
+    Messages,
+    MessageEntity,
+    Poll,
+    PollOption,
+    Game,
 )
 from .update import StopPropagation, ContinuePropagation
-from .user_and_chats import (
-    Chat, ChatMember, ChatMembers, ChatPhoto,
-    Dialog, Dialogs, User, UserStatus, ChatPreview
-)
+from .user_and_chats import Chat, ChatMember, ChatMembers, ChatPhoto, Dialog, Dialogs, User, UserStatus, ChatPreview

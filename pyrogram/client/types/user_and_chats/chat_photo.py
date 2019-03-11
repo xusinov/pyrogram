@@ -35,11 +35,7 @@ class ChatPhoto(PyrogramType):
             Unique file identifier of big (640x640) chat photo. This file_id can be used only for photo download.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 small_file_id: str,
-                 big_file_id: str):
+    def __init__(self, *, client: "pyrogram.client.ext.BaseClient", small_file_id: str, big_file_id: str):
         super().__init__(client)
 
         self.small_file_id = small_file_id
@@ -64,14 +60,17 @@ class ChatPhoto(PyrogramType):
             small_file_id=encode(
                 pack(
                     "<iiqqqqi",
-                    1, loc_small.dc_id, photo_id, 0, loc_small.volume_id, loc_small.secret, loc_small.local_id
+                    1,
+                    loc_small.dc_id,
+                    photo_id,
+                    0,
+                    loc_small.volume_id,
+                    loc_small.secret,
+                    loc_small.local_id,
                 )
             ),
             big_file_id=encode(
-                pack(
-                    "<iiqqqqi",
-                    1, loc_big.dc_id, photo_id, 0, loc_big.volume_id, loc_big.secret, loc_big.local_id
-                )
+                pack("<iiqqqqi", 1, loc_big.dc_id, photo_id, 0, loc_big.volume_id, loc_big.secret, loc_big.local_id)
             ),
-            client=client
+            client=client,
         )

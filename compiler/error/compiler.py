@@ -72,8 +72,9 @@ def start():
             with open(init, "a", encoding="utf-8") as f_init:
                 f_init.write("from .{}_{} import *\n".format(name.lower(), code))
 
-            with open("{}/source/{}".format(HOME, i), encoding="utf-8") as f_csv, \
-                    open("{}/{}_{}.py".format(DEST, name.lower(), code), "w", encoding="utf-8") as f_class:
+            with open("{}/source/{}".format(HOME, i), encoding="utf-8") as f_csv, open(
+                "{}/{}_{}.py".format(DEST, name.lower(), code), "w", encoding="utf-8"
+            ) as f_class:
                 reader = csv.reader(f_csv, delimiter="\t")
 
                 super_class = caml(name)
@@ -94,7 +95,7 @@ def start():
 
                     sub_class = caml(re.sub(r"_X", "_", id))
 
-                    f_all.write("        \"{}\": \"{}\",\n".format(id, sub_class))
+                    f_all.write('        "{}": "{}",\n'.format(id, sub_class))
 
                     sub_classes.append((sub_class, id, message))
 
@@ -109,12 +110,17 @@ def start():
                         super_class=super_class,
                         code=code,
                         docstring='"""{}"""'.format(name),
-                        sub_classes="".join([sub_class_template.format(
-                            sub_class=k[0],
-                            super_class=super_class,
-                            id="\"{}\"".format(k[1]),
-                            docstring='"""{}"""'.format(k[2])
-                        ) for k in sub_classes])
+                        sub_classes="".join(
+                            [
+                                sub_class_template.format(
+                                    sub_class=k[0],
+                                    super_class=super_class,
+                                    id='"{}"'.format(k[1]),
+                                    docstring='"""{}"""'.format(k[2]),
+                                )
+                                for k in sub_classes
+                            ]
+                        ),
                     )
 
                 f_class.write(class_template)

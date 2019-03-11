@@ -21,9 +21,5 @@ from .delete_contacts import DeleteContacts
 from .get_contacts import GetContacts
 
 
-class Contacts(
-    GetContacts,
-    DeleteContacts,
-    AddContacts
-):
+class Contacts(GetContacts, DeleteContacts, AddContacts):
     pass

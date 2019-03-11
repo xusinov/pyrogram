@@ -24,9 +24,7 @@ from ...ext import BaseClient
 
 
 class GetChatMember(BaseClient):
-    def get_chat_member(self,
-                        chat_id: Union[int, str],
-                        user_id: Union[int, str]) -> "pyrogram.ChatMember":
+    def get_chat_member(self, chat_id: Union[int, str], user_id: Union[int, str]) -> "pyrogram.ChatMember":
         """Use this method to get information about one member of a chat.
 
         Args:
@@ -48,11 +46,7 @@ class GetChatMember(BaseClient):
         user_id = self.resolve_peer(user_id)
 
         if isinstance(chat_id, types.InputPeerChat):
-            full_chat = self.send(
-                functions.messages.GetFullChat(
-                    chat_id=chat_id.chat_id
-                )
-            )
+            full_chat = self.send(functions.messages.GetFullChat(chat_id=chat_id.chat_id))
 
             for member in pyrogram.ChatMembers._parse(self, full_chat).chat_members:
                 if member.user.is_self:
@@ -60,15 +54,10 @@ class GetChatMember(BaseClient):
             else:
                 raise errors.UserNotParticipant
         elif isinstance(chat_id, types.InputPeerChannel):
-            r = self.send(
-                functions.channels.GetParticipant(
-                    channel=chat_id,
-                    user_id=user_id
-                )
-            )
+            r = self.send(functions.channels.GetParticipant(channel=chat_id, user_id=user_id))
 
             users = {i.id: i for i in r.users}
 
             return pyrogram.ChatMember._parse(self, r.participant, users)
         else:
-            raise ValueError("The chat_id \"{}\" belongs to a user".format(chat_id))
+            raise ValueError('The chat_id "{}" belongs to a user'.format(chat_id))

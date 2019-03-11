@@ -41,10 +41,8 @@ class TCPIntermediateO(TCP):
         while True:
             nonce = bytearray(os.urandom(64))
 
-            if (nonce[0] != b"\xef"
-                    and nonce[:4] not in self.RESERVED
-                    and nonce[4:4] != b"\x00" * 4):
-                nonce[56] = nonce[57] = nonce[58] = nonce[59] = 0xee
+            if nonce[0] != b"\xef" and nonce[:4] not in self.RESERVED and nonce[4:4] != b"\x00" * 4:
+                nonce[56] = nonce[57] = nonce[58] = nonce[59] = 0xEE
                 break
 
         temp = bytearray(nonce[55:7:-1])
@@ -57,12 +55,7 @@ class TCPIntermediateO(TCP):
         super().sendall(nonce)
 
     def sendall(self, data: bytes, *args):
-        super().sendall(
-            AES.ctr256_encrypt(
-                pack("<i", len(data)) + data,
-                *self.encrypt
-            )
-        )
+        super().sendall(AES.ctr256_encrypt(pack("<i", len(data)) + data, *self.encrypt))
 
     def recvall(self, length: int = 0) -> bytes or None:
         length = super().recvall(4)

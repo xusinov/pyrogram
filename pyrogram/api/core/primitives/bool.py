@@ -22,7 +22,7 @@ from ..object import Object
 
 
 class BoolFalse(Object):
-    ID = 0xbc799737
+    ID = 0xBC799737
     value = False
 
     @classmethod
@@ -34,7 +34,7 @@ class BoolFalse(Object):
 
 
 class BoolTrue(BoolFalse):
-    ID = 0x997275b5
+    ID = 0x997275B5
     value = True
 
 

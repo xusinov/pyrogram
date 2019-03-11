@@ -24,17 +24,21 @@ from ...ext import BaseClient
 
 
 class SendMessage(BaseClient):
-    def send_message(self,
-                     chat_id: Union[int, str],
-                     text: str,
-                     parse_mode: str = "",
-                     disable_web_page_preview: bool = None,
-                     disable_notification: bool = None,
-                     reply_to_message_id: int = None,
-                     reply_markup: Union["pyrogram.InlineKeyboardMarkup",
-                                         "pyrogram.ReplyKeyboardMarkup",
-                                         "pyrogram.ReplyKeyboardRemove",
-                                         "pyrogram.ForceReply"] = None) -> "pyrogram.Message":
+    def send_message(
+        self,
+        chat_id: Union[int, str],
+        text: str,
+        parse_mode: str = "",
+        disable_web_page_preview: bool = None,
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+        reply_markup: Union[
+            "pyrogram.InlineKeyboardMarkup",
+            "pyrogram.ReplyKeyboardMarkup",
+            "pyrogram.ReplyKeyboardRemove",
+            "pyrogram.ForceReply",
+        ] = None,
+    ) -> "pyrogram.Message":
         """Use this method to send text messages.
 
         Args:
@@ -83,37 +87,25 @@ class SendMessage(BaseClient):
                 random_id=self.rnd_id(),
                 reply_markup=reply_markup.write() if reply_markup else None,
                 message=message,
-                entities=entities
+                entities=entities,
             )
         )
 
         if isinstance(r, types.UpdateShortSentMessage):
             peer = self.resolve_peer(chat_id)
 
-            peer_id = (
-                peer.user_id
-                if isinstance(peer, types.InputPeerUser)
-                else -peer.chat_id
-            )
+            peer_id = peer.user_id if isinstance(peer, types.InputPeerUser) else -peer.chat_id
 
             return pyrogram.Message(
                 message_id=r.id,
-                chat=pyrogram.Chat(
-                    id=peer_id,
-                    type="private",
-                    client=self
-                ),
+                chat=pyrogram.Chat(id=peer_id, type="private", client=self),
                 text=message,
                 date=r.date,
                 outgoing=r.out,
                 entities=entities,
-                client=self
+                client=self,
             )
 
         for i in r.updates:
             if isinstance(i, (types.UpdateNewMessage, types.UpdateNewChannelMessage)):
-                return pyrogram.Message._parse(
-                    self, i.message,
-                    {i.id: i for i in r.users},
-                    {i.id: i for i in r.chats}
-                )
+                return pyrogram.Message._parse(self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats})

@@ -28,20 +28,24 @@ from pyrogram.client.ext import BaseClient, utils
 
 
 class SendDocument(BaseClient):
-    def send_document(self,
-                      chat_id: Union[int, str],
-                      document: str,
-                      thumb: str = None,
-                      caption: str = "",
-                      parse_mode: str = "",
-                      disable_notification: bool = None,
-                      reply_to_message_id: int = None,
-                      reply_markup: Union["pyrogram.InlineKeyboardMarkup",
-                                          "pyrogram.ReplyKeyboardMarkup",
-                                          "pyrogram.ReplyKeyboardRemove",
-                                          "pyrogram.ForceReply"] = None,
-                      progress: callable = None,
-                      progress_args: tuple = ()) -> Union["pyrogram.Message", None]:
+    def send_document(
+        self,
+        chat_id: Union[int, str],
+        document: str,
+        thumb: str = None,
+        caption: str = "",
+        parse_mode: str = "",
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+        reply_markup: Union[
+            "pyrogram.InlineKeyboardMarkup",
+            "pyrogram.ReplyKeyboardMarkup",
+            "pyrogram.ReplyKeyboardRemove",
+            "pyrogram.ForceReply",
+        ] = None,
+        progress: callable = None,
+        progress_args: tuple = (),
+    ) -> Union["pyrogram.Message", None]:
         """Use this method to send general files.
 
         Args:
@@ -122,14 +126,10 @@ class SendDocument(BaseClient):
                     mime_type="application/zip",
                     file=file,
                     thumb=thumb,
-                    attributes=[
-                        types.DocumentAttributeFilename(os.path.basename(document))
-                    ]
+                    attributes=[types.DocumentAttributeFilename(os.path.basename(document))],
                 )
             elif document.startswith("http"):
-                media = types.InputMediaDocumentExternal(
-                    url=document
-                )
+                media = types.InputMediaDocumentExternal(url=document)
             else:
                 try:
                     decoded = utils.decode(document)
@@ -147,11 +147,7 @@ class SendDocument(BaseClient):
                             raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                     media = types.InputMediaDocument(
-                        id=types.InputDocument(
-                            id=unpacked[2],
-                            access_hash=unpacked[3],
-                            file_reference=b""
-                        )
+                        id=types.InputDocument(id=unpacked[2], access_hash=unpacked[3], file_reference=b"")
                     )
 
             while True:
@@ -173,9 +169,7 @@ class SendDocument(BaseClient):
                     for i in r.updates:
                         if isinstance(i, (types.UpdateNewMessage, types.UpdateNewChannelMessage)):
                             return pyrogram.Message._parse(
-                                self, i.message,
-                                {i.id: i for i in r.users},
-                                {i.id: i for i in r.chats}
+                                self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats}
                             )
         except BaseClient.StopTransmission:
             return None

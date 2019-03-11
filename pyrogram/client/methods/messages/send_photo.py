@@ -28,20 +28,24 @@ from pyrogram.client.ext import BaseClient, utils
 
 
 class SendPhoto(BaseClient):
-    def send_photo(self,
-                   chat_id: Union[int, str],
-                   photo: str,
-                   caption: str = "",
-                   parse_mode: str = "",
-                   ttl_seconds: int = None,
-                   disable_notification: bool = None,
-                   reply_to_message_id: int = None,
-                   reply_markup: Union["pyrogram.InlineKeyboardMarkup",
-                                       "pyrogram.ReplyKeyboardMarkup",
-                                       "pyrogram.ReplyKeyboardRemove",
-                                       "pyrogram.ForceReply"] = None,
-                   progress: callable = None,
-                   progress_args: tuple = ()) -> Union["pyrogram.Message", None]:
+    def send_photo(
+        self,
+        chat_id: Union[int, str],
+        photo: str,
+        caption: str = "",
+        parse_mode: str = "",
+        ttl_seconds: int = None,
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+        reply_markup: Union[
+            "pyrogram.InlineKeyboardMarkup",
+            "pyrogram.ReplyKeyboardMarkup",
+            "pyrogram.ReplyKeyboardRemove",
+            "pyrogram.ForceReply",
+        ] = None,
+        progress: callable = None,
+        progress_args: tuple = (),
+    ) -> Union["pyrogram.Message", None]:
         """Use this method to send photos.
 
         Args:
@@ -116,15 +120,9 @@ class SendPhoto(BaseClient):
         try:
             if os.path.exists(photo):
                 file = self.save_file(photo, progress=progress, progress_args=progress_args)
-                media = types.InputMediaUploadedPhoto(
-                    file=file,
-                    ttl_seconds=ttl_seconds
-                )
+                media = types.InputMediaUploadedPhoto(file=file, ttl_seconds=ttl_seconds)
             elif photo.startswith("http"):
-                media = types.InputMediaPhotoExternal(
-                    url=photo,
-                    ttl_seconds=ttl_seconds
-                )
+                media = types.InputMediaPhotoExternal(url=photo, ttl_seconds=ttl_seconds)
             else:
                 try:
                     decoded = utils.decode(photo)
@@ -142,12 +140,8 @@ class SendPhoto(BaseClient):
                             raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                     media = types.InputMediaPhoto(
-                        id=types.InputPhoto(
-                            id=unpacked[2],
-                            access_hash=unpacked[3],
-                            file_reference=b""
-                        ),
-                        ttl_seconds=ttl_seconds
+                        id=types.InputPhoto(id=unpacked[2], access_hash=unpacked[3], file_reference=b""),
+                        ttl_seconds=ttl_seconds,
                     )
 
             while True:
@@ -169,9 +163,7 @@ class SendPhoto(BaseClient):
                     for i in r.updates:
                         if isinstance(i, (types.UpdateNewMessage, types.UpdateNewChannelMessage)):
                             return pyrogram.Message._parse(
-                                self, i.message,
-                                {i.id: i for i in r.users},
-                                {i.id: i for i in r.chats}
+                                self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats}
                             )
         except BaseClient.StopTransmission:
             return None

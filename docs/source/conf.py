@@ -20,7 +20,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath("../.."))
 
 # Import after sys.path.insert() to avoid issues
 from pyrogram import __version__
@@ -34,34 +34,30 @@ from pyrogram import __version__
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.autosummary'
-]
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon", "sphinx.ext.autosummary"]
 
 # Don't show source files on docs
 html_show_sourcelink = True
 
 # Order by source, not alphabetically
-autodoc_member_order = 'bysource'
+autodoc_member_order = "bysource"
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ".rst"
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = "index"
 
 # General information about the project.
-project = 'Pyrogram'
-copyright = '2017-2018, Dan Tès'
-author = 'Dan Tès'
+project = "Pyrogram"
+copyright = "2017-2018, Dan Tès"
+author = "Dan Tès"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -85,7 +81,7 @@ language = None
 exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'tango'
+pygments_style = "tango"
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
@@ -100,28 +96,28 @@ html_show_copyright = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
 html_theme_options = {
-    'canonical_url': "https://docs.pyrogram.ml/",
-    'collapse_navigation': False,
-    'sticky_navigation': False,
-    'logo_only': True,
-    'display_version': True
+    "canonical_url": "https://docs.pyrogram.ml/",
+    "collapse_navigation": False,
+    "sticky_navigation": False,
+    "logo_only": True,
+    "display_version": True,
 }
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = '_images/logo.png'
+html_logo = "_images/logo.png"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs. This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = '_images/favicon.ico'
+html_favicon = "_images/favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -133,17 +129,12 @@ html_favicon = '_images/favicon.ico'
 #
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-html_sidebars = {
-    '**': [
-        'relations.html',  # needs 'show_related': True theme option to display
-        'searchbox.html',
-    ]
-}
+html_sidebars = {"**": ["relations.html", "searchbox.html"]}  # needs 'show_related': True theme option to display
 
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Pyrogramdoc'
+htmlhelp_basename = "Pyrogramdoc"
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -151,15 +142,12 @@ latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
-
     # The font size ('10pt', '11pt' or '12pt').
     #
     # 'pointsize': '10pt',
-
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
-
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
@@ -168,19 +156,13 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'Pyrogram.tex', 'Pyrogram Documentation',
-     'Dan Tès', 'manual'),
-]
+latex_documents = [(master_doc, "Pyrogram.tex", "Pyrogram Documentation", "Dan Tès", "manual")]
 
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'pyrogram', 'Pyrogram Documentation',
-     [author], 1)
-]
+man_pages = [(master_doc, "pyrogram", "Pyrogram Documentation", [author], 1)]
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -188,7 +170,13 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Pyrogram', 'Pyrogram Documentation',
-     author, 'Pyrogram', 'One line description of project.',
-     'Miscellaneous'),
+    (
+        master_doc,
+        "Pyrogram",
+        "Pyrogram Documentation",
+        author,
+        "Pyrogram",
+        "One line description of project.",
+        "Miscellaneous",
+    )
 ]

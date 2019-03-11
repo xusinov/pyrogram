@@ -40,10 +40,8 @@ class TCPAbridgedO(TCP):
         while True:
             nonce = bytearray(os.urandom(64))
 
-            if (nonce[0] != b"\xef"
-                    and nonce[:4] not in self.RESERVED
-                    and nonce[4:4] != b"\x00" * 4):
-                nonce[56] = nonce[57] = nonce[58] = nonce[59] = 0xef
+            if nonce[0] != b"\xef" and nonce[:4] not in self.RESERVED and nonce[4:4] != b"\x00" * 4:
+                nonce[56] = nonce[57] = nonce[58] = nonce[59] = 0xEF
                 break
 
         temp = bytearray(nonce[55:7:-1])
@@ -60,11 +58,7 @@ class TCPAbridgedO(TCP):
 
         super().sendall(
             AES.ctr256_encrypt(
-                (bytes([length])
-                 if length <= 126
-                 else b"\x7f" + length.to_bytes(3, "little"))
-                + data,
-                *self.encrypt
+                (bytes([length]) if length <= 126 else b"\x7f" + length.to_bytes(3, "little")) + data, *self.encrypt
             )
         )
 

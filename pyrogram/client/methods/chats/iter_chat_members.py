@@ -37,11 +37,9 @@ QUERYABLE_FILTERS = (Filters.ALL, Filters.KICKED, Filters.RESTRICTED)
 
 
 class IterChatMembers(BaseClient):
-    def iter_chat_members(self,
-                          chat_id: Union[int, str],
-                          limit: int = 0,
-                          query: str = "",
-                          filter: str = Filters.ALL) -> Generator["pyrogram.ChatMember", None, None]:
+    def iter_chat_members(
+        self, chat_id: Union[int, str], limit: int = 0, query: str = "", filter: str = Filters.ALL
+    ) -> Generator["pyrogram.ChatMember", None, None]:
         """Use this method to iterate through the members of a chat sequentially.
 
         This convenience method does the same as repeatedly calling :meth:`get_chat_members` in a loop, thus saving you
@@ -83,11 +81,7 @@ class IterChatMembers(BaseClient):
         total = limit or (1 << 31) - 1
         limit = min(200, total)
 
-        filter = (
-            Filters.RECENT
-            if self.get_chat_members_count(chat_id) <= 10000 and filter == Filters.ALL
-            else filter
-        )
+        filter = Filters.RECENT if self.get_chat_members_count(chat_id) <= 10000 and filter == Filters.ALL else filter
 
         if filter not in QUERYABLE_FILTERS:
             queries = [""]
@@ -97,11 +91,7 @@ class IterChatMembers(BaseClient):
 
             while True:
                 chat_members = self.get_chat_members(
-                    chat_id=chat_id,
-                    offset=offset,
-                    limit=limit,
-                    query=q,
-                    filter=filter
+                    chat_id=chat_id, offset=offset, limit=limit, query=q, filter=filter
                 ).chat_members
 
                 if not chat_members:

@@ -23,10 +23,7 @@ from pyrogram.client.ext import BaseClient
 
 
 class DeleteMessages(BaseClient):
-    def delete_messages(self,
-                        chat_id: Union[int, str],
-                        message_ids: Iterable[int],
-                        revoke: bool = True) -> bool:
+    def delete_messages(self, chat_id: Union[int, str], message_ids: Iterable[int], revoke: bool = True) -> bool:
         """Use this method to delete messages, including service messages, with the following limitations:
 
         - A message can only be deleted if it was sent less than 48 hours ago.
@@ -61,18 +58,8 @@ class DeleteMessages(BaseClient):
         message_ids = list(message_ids) if not isinstance(message_ids, int) else [message_ids]
 
         if isinstance(peer, types.InputPeerChannel):
-            self.send(
-                functions.channels.DeleteMessages(
-                    channel=peer,
-                    id=message_ids
-                )
-            )
+            self.send(functions.channels.DeleteMessages(channel=peer, id=message_ids))
         else:
-            self.send(
-                functions.messages.DeleteMessages(
-                    id=message_ids,
-                    revoke=revoke or None
-                )
-            )
+            self.send(functions.messages.DeleteMessages(id=message_ids, revoke=revoke or None))
 
         return True

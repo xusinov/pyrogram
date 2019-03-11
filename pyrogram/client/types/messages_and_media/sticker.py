@@ -64,19 +64,21 @@ class Sticker(PyrogramType):
 
     # TODO: Add mask position
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 file_id: str,
-                 width: int,
-                 height: int,
-                 thumb: PhotoSize = None,
-                 file_name: str = None,
-                 mime_type: str = None,
-                 file_size: int = None,
-                 date: int = None,
-                 emoji: str = None,
-                 set_name: str = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        file_id: str,
+        width: int,
+        height: int,
+        thumb: PhotoSize = None,
+        file_name: str = None,
+        mime_type: str = None,
+        file_size: int = None,
+        date: int = None,
+        emoji: str = None,
+        set_name: str = None
+    ):
         super().__init__(client)
 
         self.file_id = file_id
@@ -95,17 +97,18 @@ class Sticker(PyrogramType):
     @lru_cache(maxsize=256)
     def get_sticker_set_name(send, input_sticker_set_id):
         try:
-            return send(
-                functions.messages.GetStickerSet(
-                    types.InputStickerSetID(*input_sticker_set_id)
-                )
-            ).set.short_name
+            return send(functions.messages.GetStickerSet(types.InputStickerSetID(*input_sticker_set_id))).set.short_name
         except StickersetInvalid:
             return None
 
     @staticmethod
-    def _parse(client, sticker: types.Document, image_size_attributes: types.DocumentAttributeImageSize,
-               sticker_attributes: types.DocumentAttributeSticker, file_name: str) -> "Sticker":
+    def _parse(
+        client,
+        sticker: types.Document,
+        image_size_attributes: types.DocumentAttributeImageSize,
+        sticker_attributes: types.DocumentAttributeSticker,
+        file_name: str,
+    ) -> "Sticker":
         sticker_set = sticker_attributes.stickerset
 
         if isinstance(sticker_set, types.InputStickerSetID):
@@ -115,15 +118,7 @@ class Sticker(PyrogramType):
             set_name = None
 
         return Sticker(
-            file_id=encode(
-                pack(
-                    "<iiqq",
-                    8,
-                    sticker.dc_id,
-                    sticker.id,
-                    sticker.access_hash
-                )
-            ),
+            file_id=encode(pack("<iiqq", 8, sticker.dc_id, sticker.id, sticker.access_hash)),
             width=image_size_attributes.w if image_size_attributes else 0,
             height=image_size_attributes.h if image_size_attributes else 0,
             thumb=PhotoSize._parse(client, sticker.thumb),
@@ -134,5 +129,5 @@ class Sticker(PyrogramType):
             mime_type=sticker.mime_type,
             file_name=file_name,
             date=sticker.date,
-            client=client
+            client=client,
         )

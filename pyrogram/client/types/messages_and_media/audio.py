@@ -57,18 +57,20 @@ class Audio(PyrogramType):
             Title of the audio as defined by sender or by audio tags.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 file_id: str,
-                 duration: int,
-                 thumb: PhotoSize = None,
-                 file_name: str = None,
-                 mime_type: str = None,
-                 file_size: int = None,
-                 date: int = None,
-                 performer: str = None,
-                 title: str = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        file_id: str,
+        duration: int,
+        thumb: PhotoSize = None,
+        file_name: str = None,
+        mime_type: str = None,
+        file_size: int = None,
+        date: int = None,
+        performer: str = None,
+        title: str = None
+    ):
         super().__init__(client)
 
         self.file_id = file_id
@@ -82,18 +84,11 @@ class Audio(PyrogramType):
         self.title = title
 
     @staticmethod
-    def _parse(client, audio: types.Document, audio_attributes: types.DocumentAttributeAudio,
-               file_name: str) -> "Audio":
+    def _parse(
+        client, audio: types.Document, audio_attributes: types.DocumentAttributeAudio, file_name: str
+    ) -> "Audio":
         return Audio(
-            file_id=encode(
-                pack(
-                    "<iiqq",
-                    9,
-                    audio.dc_id,
-                    audio.id,
-                    audio.access_hash
-                )
-            ),
+            file_id=encode(pack("<iiqq", 9, audio.dc_id, audio.id, audio.access_hash)),
             duration=audio_attributes.duration,
             performer=audio_attributes.performer,
             title=audio_attributes.title,
@@ -102,5 +97,5 @@ class Audio(PyrogramType):
             thumb=PhotoSize._parse(client, audio.thumb),
             file_name=file_name,
             date=audio.date,
-            client=client
+            client=client,
         )

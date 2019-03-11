@@ -28,20 +28,24 @@ from pyrogram.client.ext import BaseClient, utils
 
 
 class SendVoice(BaseClient):
-    def send_voice(self,
-                   chat_id: Union[int, str],
-                   voice: str,
-                   caption: str = "",
-                   parse_mode: str = "",
-                   duration: int = 0,
-                   disable_notification: bool = None,
-                   reply_to_message_id: int = None,
-                   reply_markup: Union["pyrogram.InlineKeyboardMarkup",
-                                       "pyrogram.ReplyKeyboardMarkup",
-                                       "pyrogram.ReplyKeyboardRemove",
-                                       "pyrogram.ForceReply"] = None,
-                   progress: callable = None,
-                   progress_args: tuple = ()) -> Union["pyrogram.Message", None]:
+    def send_voice(
+        self,
+        chat_id: Union[int, str],
+        voice: str,
+        caption: str = "",
+        parse_mode: str = "",
+        duration: int = 0,
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+        reply_markup: Union[
+            "pyrogram.InlineKeyboardMarkup",
+            "pyrogram.ReplyKeyboardMarkup",
+            "pyrogram.ReplyKeyboardRemove",
+            "pyrogram.ForceReply",
+        ] = None,
+        progress: callable = None,
+        progress_args: tuple = (),
+    ) -> Union["pyrogram.Message", None]:
         """Use this method to send audio files.
 
         Args:
@@ -117,17 +121,10 @@ class SendVoice(BaseClient):
                 media = types.InputMediaUploadedDocument(
                     mime_type="audio/mpeg",
                     file=file,
-                    attributes=[
-                        types.DocumentAttributeAudio(
-                            voice=True,
-                            duration=duration
-                        )
-                    ]
+                    attributes=[types.DocumentAttributeAudio(voice=True, duration=duration)],
                 )
             elif voice.startswith("http"):
-                media = types.InputMediaDocumentExternal(
-                    url=voice
-                )
+                media = types.InputMediaDocumentExternal(url=voice)
             else:
                 try:
                     decoded = utils.decode(voice)
@@ -145,11 +142,7 @@ class SendVoice(BaseClient):
                             raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                     media = types.InputMediaDocument(
-                        id=types.InputDocument(
-                            id=unpacked[2],
-                            access_hash=unpacked[3],
-                            file_reference=b""
-                        )
+                        id=types.InputDocument(id=unpacked[2], access_hash=unpacked[3], file_reference=b"")
                     )
 
             while True:
@@ -171,9 +164,7 @@ class SendVoice(BaseClient):
                     for i in r.updates:
                         if isinstance(i, (types.UpdateNewMessage, types.UpdateNewChannelMessage)):
                             return pyrogram.Message._parse(
-                                self, i.message,
-                                {i.id: i for i in r.users},
-                                {i.id: i for i in r.chats}
+                                self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats}
                             )
         except BaseClient.StopTransmission:
             return None

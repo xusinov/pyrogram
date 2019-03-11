@@ -32,15 +32,9 @@ class BaseClient:
 
     APP_VERSION = "Pyrogram \U0001f525 {}".format(__version__)
 
-    DEVICE_MODEL = "{} {}".format(
-        platform.python_implementation(),
-        platform.python_version()
-    )
+    DEVICE_MODEL = "{} {}".format(platform.python_implementation(), platform.python_version())
 
-    SYSTEM_VERSION = "{} {}".format(
-        platform.system(),
-        platform.release()
-    )
+    SYSTEM_VERSION = "{} {}".format(platform.system(), platform.release())
 
     LANG_CODE = "en"
 
@@ -64,7 +58,7 @@ class BaseClient:
         8: "sticker",
         9: "audio",
         10: "animation",
-        13: "video_note"
+        13: "video_note",
     }
 
     def __init__(self):

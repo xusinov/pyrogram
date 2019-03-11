@@ -20,7 +20,10 @@ from .client import Client
 from .ext import BaseClient, ChatAction, Emoji, ParseMode
 from .filters import Filters
 from .handlers import (
-    MessageHandler, DeletedMessagesHandler,
-    CallbackQueryHandler, RawUpdateHandler,
-    DisconnectHandler, UserStatusHandler
+    MessageHandler,
+    DeletedMessagesHandler,
+    CallbackQueryHandler,
+    RawUpdateHandler,
+    DisconnectHandler,
+    UserStatusHandler,
 )

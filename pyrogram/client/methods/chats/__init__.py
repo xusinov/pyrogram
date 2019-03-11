@@ -62,6 +62,6 @@ class Chats(
     GetChatPreview,
     IterDialogs,
     IterChatMembers,
-    UpdateChatUsername
+    UpdateChatUsername,
 ):
     pass

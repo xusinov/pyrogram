@@ -25,7 +25,6 @@ try:
 
     log.info("Using TgCrypto")
 
-
     class AES:
         @classmethod
         def ige256_encrypt(cls, data: bytes, key: bytes, iv: bytes) -> bytes:
@@ -45,11 +44,9 @@ try:
 
         @staticmethod
         def xor(a: bytes, b: bytes) -> bytes:
-            return int.to_bytes(
-                int.from_bytes(a, "big") ^ int.from_bytes(b, "big"),
-                len(a),
-                "big",
-            )
+            return int.to_bytes(int.from_bytes(a, "big") ^ int.from_bytes(b, "big"), len(a), "big")
+
+
 except ImportError:
     import pyaes
 
@@ -58,7 +55,6 @@ except ImportError:
         "Pyrogram will work the same, but at a much slower speed. "
         "More info: https://docs.pyrogram.ml/resources/TgCrypto"
     )
-
 
     class AES:
         @classmethod
@@ -79,11 +75,7 @@ except ImportError:
 
         @staticmethod
         def xor(a: bytes, b: bytes) -> bytes:
-            return int.to_bytes(
-                int.from_bytes(a, "big") ^ int.from_bytes(b, "big"),
-                len(a),
-                "big",
-            )
+            return int.to_bytes(int.from_bytes(a, "big") ^ int.from_bytes(b, "big"), len(a), "big")
 
         @classmethod
         def ige(cls, data: bytes, key: bytes, iv: bytes, encrypt: bool) -> bytes:
@@ -92,7 +84,7 @@ except ImportError:
             iv_1 = iv[:16]
             iv_2 = iv[16:]
 
-            data = [data[i: i + 16] for i in range(0, len(data), 16)]
+            data = [data[i : i + 16] for i in range(0, len(data), 16)]
 
             if encrypt:
                 for i, chunk in enumerate(data):

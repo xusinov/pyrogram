@@ -41,12 +41,7 @@ class Photo(PyrogramType):
             Available sizes of this photo.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 id: str,
-                 date: int,
-                 sizes: List[PhotoSize]):
+    def __init__(self, *, client: "pyrogram.client.ext.BaseClient", id: str, date: int, sizes: List[PhotoSize]):
         super().__init__(client)
 
         self.id = id
@@ -76,26 +71,26 @@ class Photo(PyrogramType):
                             file_id=encode(
                                 pack(
                                     "<iiqqqqi",
-                                    2, loc.dc_id, photo.id, photo.access_hash,
-                                    loc.volume_id, loc.secret, loc.local_id)),
+                                    2,
+                                    loc.dc_id,
+                                    photo.id,
+                                    photo.access_hash,
+                                    loc.volume_id,
+                                    loc.secret,
+                                    loc.local_id,
+                                )
+                            ),
                             width=raw_size.w,
                             height=raw_size.h,
                             file_size=file_size,
-                            client=client
+                            client=client,
                         )
 
                         sizes.append(size)
 
             return Photo(
-                id=b64encode(
-                    pack(
-                        "<qq",
-                        photo.id,
-                        photo.access_hash
-                    ),
-                    b"-_"
-                ).decode().rstrip("="),
+                id=b64encode(pack("<qq", photo.id, photo.access_hash), b"-_").decode().rstrip("="),
                 date=photo.date,
                 sizes=sizes,
-                client=client
+                client=client,
             )

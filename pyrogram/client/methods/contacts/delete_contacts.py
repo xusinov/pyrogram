@@ -24,8 +24,7 @@ from ...ext import BaseClient
 
 
 class DeleteContacts(BaseClient):
-    def delete_contacts(self,
-                        ids: List[int]):
+    def delete_contacts(self, ids: List[int]):
         """Use this method to delete contacts from your Telegram address book
 
         Args:
@@ -50,8 +49,4 @@ class DeleteContacts(BaseClient):
                 if isinstance(input_user, types.InputPeerUser):
                     contacts.append(input_user)
 
-        return self.send(
-            functions.contacts.DeleteContacts(
-                id=contacts
-            )
-        )
+        return self.send(functions.contacts.DeleteContacts(id=contacts))

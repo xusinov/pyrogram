@@ -60,17 +60,19 @@ class MessageEntity(PyrogramType):
         types.MessageEntityPre.ID: "pre",
         types.MessageEntityTextUrl.ID: "text_link",
         types.MessageEntityMentionName.ID: "text_mention",
-        types.MessageEntityPhone.ID: "phone_number"
+        types.MessageEntityPhone.ID: "phone_number",
     }
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 type: str,
-                 offset: int,
-                 length: int,
-                 url: str = None,
-                 user: User = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        type: str,
+        offset: int,
+        length: int,
+        url: str = None,
+        user: User = None
+    ):
         super().__init__(client)
 
         self.type = type
@@ -92,5 +94,5 @@ class MessageEntity(PyrogramType):
             length=entity.length,
             url=getattr(entity, "url", None),
             user=User._parse(client, users.get(getattr(entity, "user_id", None), None)),
-            client=client
+            client=client,
         )

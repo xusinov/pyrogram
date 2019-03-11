@@ -57,18 +57,20 @@ class Animation(PyrogramType):
             Date the animation was sent in Unix time.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 file_id: str,
-                 width: int,
-                 height: int,
-                 duration: int,
-                 thumb: PhotoSize = None,
-                 file_name: str = None,
-                 mime_type: str = None,
-                 file_size: int = None,
-                 date: int = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        file_id: str,
+        width: int,
+        height: int,
+        duration: int,
+        thumb: PhotoSize = None,
+        file_name: str = None,
+        mime_type: str = None,
+        file_size: int = None,
+        date: int = None
+    ):
         super().__init__(client)
 
         self.file_id = file_id
@@ -82,18 +84,11 @@ class Animation(PyrogramType):
         self.duration = duration
 
     @staticmethod
-    def _parse(client, animation: types.Document, video_attributes: types.DocumentAttributeVideo,
-               file_name: str) -> "Animation":
+    def _parse(
+        client, animation: types.Document, video_attributes: types.DocumentAttributeVideo, file_name: str
+    ) -> "Animation":
         return Animation(
-            file_id=encode(
-                pack(
-                    "<iiqq",
-                    10,
-                    animation.dc_id,
-                    animation.id,
-                    animation.access_hash
-                )
-            ),
+            file_id=encode(pack("<iiqq", 10, animation.dc_id, animation.id, animation.access_hash)),
             width=getattr(video_attributes, "w", 0),
             height=getattr(video_attributes, "h", 0),
             duration=getattr(video_attributes, "duration", 0),
@@ -102,5 +97,5 @@ class Animation(PyrogramType):
             file_size=animation.size,
             file_name=file_name,
             date=animation.date,
-            client=client
+            client=client,
         )

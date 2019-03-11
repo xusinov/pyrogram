@@ -24,10 +24,9 @@ from ...ext import BaseClient
 
 
 class GetUserProfilePhotos(BaseClient):
-    def get_user_profile_photos(self,
-                                user_id: Union[int, str],
-                                offset: int = 0,
-                                limit: int = 100) -> "pyrogram.UserProfilePhotos":
+    def get_user_profile_photos(
+        self, user_id: Union[int, str], offset: int = 0, limit: int = 100
+    ) -> "pyrogram.UserProfilePhotos":
         """Use this method to get a list of profile pictures for a user.
 
         Args:
@@ -53,11 +52,6 @@ class GetUserProfilePhotos(BaseClient):
         return pyrogram.UserProfilePhotos._parse(
             self,
             self.send(
-                functions.photos.GetUserPhotos(
-                    user_id=self.resolve_peer(user_id),
-                    offset=offset,
-                    max_id=0,
-                    limit=limit
-                )
-            )
+                functions.photos.GetUserPhotos(user_id=self.resolve_peer(user_id), offset=offset, max_id=0, limit=limit)
+            ),
         )

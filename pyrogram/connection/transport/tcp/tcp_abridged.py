@@ -34,12 +34,7 @@ class TCPAbridged(TCP):
     def sendall(self, data: bytes, *args):
         length = len(data) // 4
 
-        super().sendall(
-            (bytes([length])
-             if length <= 126
-             else b"\x7f" + length.to_bytes(3, "little"))
-            + data
-        )
+        super().sendall((bytes([length]) if length <= 126 else b"\x7f" + length.to_bytes(3, "little")) + data)
 
     def recvall(self, length: int = 0) -> bytes or None:
         length = super().recvall(1)

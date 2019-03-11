@@ -24,12 +24,9 @@ from pyrogram.client.ext import BaseClient
 
 
 class GetInlineBotResults(BaseClient):
-    def get_inline_bot_results(self,
-                               bot: Union[int, str],
-                               query: str,
-                               offset: str = "",
-                               latitude: float = None,
-                               longitude: float = None):
+    def get_inline_bot_results(
+        self, bot: Union[int, str], query: str, offset: str = "", latitude: float = None, longitude: float = None
+    ):
         """Use this method to get bot results via inline queries.
         You can then send a result using :obj:`send_inline_bot_result <pyrogram.Client.send_inline_bot_result>`
 
@@ -68,10 +65,9 @@ class GetInlineBotResults(BaseClient):
                     peer=types.InputPeerSelf(),
                     query=query,
                     offset=offset,
-                    geo_point=types.InputGeoPoint(
-                        lat=latitude,
-                        long=longitude
-                    ) if (latitude is not None and longitude is not None) else None
+                    geo_point=types.InputGeoPoint(lat=latitude, long=longitude)
+                    if (latitude is not None and longitude is not None)
+                    else None,
                 )
             )
         except UnknownError as e:

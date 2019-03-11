@@ -33,12 +33,9 @@ class Filters:
 
 
 class GetChatMembers(BaseClient):
-    def get_chat_members(self,
-                         chat_id: Union[int, str],
-                         offset: int = 0,
-                         limit: int = 200,
-                         query: str = "",
-                         filter: str = Filters.ALL) -> "pyrogram.ChatMembers":
+    def get_chat_members(
+        self, chat_id: Union[int, str], offset: int = 0, limit: int = 200, query: str = "", filter: str = Filters.ALL
+    ) -> "pyrogram.ChatMembers":
         """Use this method to get a chunk of the members list of a chat.
 
         You can get up to 200 chat members at once.
@@ -88,14 +85,7 @@ class GetChatMembers(BaseClient):
         peer = self.resolve_peer(chat_id)
 
         if isinstance(peer, types.InputPeerChat):
-            return pyrogram.ChatMembers._parse(
-                self,
-                self.send(
-                    functions.messages.GetFullChat(
-                        peer.chat_id
-                    )
-                )
-            )
+            return pyrogram.ChatMembers._parse(self, self.send(functions.messages.GetFullChat(peer.chat_id)))
         elif isinstance(peer, types.InputPeerChannel):
             filter = filter.lower()
 
@@ -112,19 +102,13 @@ class GetChatMembers(BaseClient):
             elif filter == Filters.ADMINISTRATORS:
                 filter = types.ChannelParticipantsAdmins()
             else:
-                raise ValueError("Invalid filter \"{}\"".format(filter))
+                raise ValueError('Invalid filter "{}"'.format(filter))
 
             return pyrogram.ChatMembers._parse(
                 self,
                 self.send(
-                    functions.channels.GetParticipants(
-                        channel=peer,
-                        filter=filter,
-                        offset=offset,
-                        limit=limit,
-                        hash=0
-                    )
-                )
+                    functions.channels.GetParticipants(channel=peer, filter=filter, offset=offset, limit=limit, hash=0)
+                ),
             )
         else:
-            raise ValueError("The chat_id \"{}\" belongs to a user".format(chat_id))
+            raise ValueError('The chat_id "{}" belongs to a user'.format(chat_id))

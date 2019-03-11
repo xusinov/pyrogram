@@ -24,16 +24,20 @@ from pyrogram.client.ext import BaseClient
 
 
 class SendLocation(BaseClient):
-    def send_location(self,
-                      chat_id: Union[int, str],
-                      latitude: float,
-                      longitude: float,
-                      disable_notification: bool = None,
-                      reply_to_message_id: int = None,
-                      reply_markup: Union["pyrogram.InlineKeyboardMarkup",
-                                          "pyrogram.ReplyKeyboardMarkup",
-                                          "pyrogram.ReplyKeyboardRemove",
-                                          "pyrogram.ForceReply"] = None) -> "pyrogram.Message":
+    def send_location(
+        self,
+        chat_id: Union[int, str],
+        latitude: float,
+        longitude: float,
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+        reply_markup: Union[
+            "pyrogram.InlineKeyboardMarkup",
+            "pyrogram.ReplyKeyboardMarkup",
+            "pyrogram.ReplyKeyboardRemove",
+            "pyrogram.ForceReply",
+        ] = None,
+    ) -> "pyrogram.Message":
         """Use this method to send points on the map.
 
         Args:
@@ -68,24 +72,15 @@ class SendLocation(BaseClient):
         r = self.send(
             functions.messages.SendMedia(
                 peer=self.resolve_peer(chat_id),
-                media=types.InputMediaGeoPoint(
-                    types.InputGeoPoint(
-                        latitude,
-                        longitude
-                    )
-                ),
+                media=types.InputMediaGeoPoint(types.InputGeoPoint(latitude, longitude)),
                 message="",
                 silent=disable_notification or None,
                 reply_to_msg_id=reply_to_message_id,
                 random_id=self.rnd_id(),
-                reply_markup=reply_markup.write() if reply_markup else None
+                reply_markup=reply_markup.write() if reply_markup else None,
             )
         )
 
         for i in r.updates:
             if isinstance(i, (types.UpdateNewMessage, types.UpdateNewChannelMessage)):
-                return pyrogram.Message._parse(
-                    self, i.message,
-                    {i.id: i for i in r.users},
-                    {i.id: i for i in r.chats}
-                )
+                return pyrogram.Message._parse(self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats})

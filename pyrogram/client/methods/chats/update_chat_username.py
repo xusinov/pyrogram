@@ -23,9 +23,7 @@ from ...ext import BaseClient
 
 
 class UpdateChatUsername(BaseClient):
-    def update_chat_username(self,
-                             chat_id: Union[int, str],
-                             username: Union[str, None]) -> bool:
+    def update_chat_username(self, chat_id: Union[int, str], username: Union[str, None]) -> bool:
         """Use this method to update a channel or a supergroup username.
         
         To update your own username (for users only, not bots) you can use :meth:`update_username`.
@@ -45,15 +43,8 @@ class UpdateChatUsername(BaseClient):
         """
 
         peer = self.resolve_peer(chat_id)
-        
+
         if isinstance(peer, types.InputPeerChannel):
-            return bool(
-                self.send(
-                    functions.channels.UpdateUsername(
-                        channel=peer,
-                        username=username or ""
-                    )
-                )
-            )
+            return bool(self.send(functions.channels.UpdateUsername(channel=peer, username=username or "")))
         else:
-            raise ValueError("The chat_id \"{}\" belongs to a user or chat".format(chat_id))
+            raise ValueError('The chat_id "{}" belongs to a user or chat'.format(chat_id))

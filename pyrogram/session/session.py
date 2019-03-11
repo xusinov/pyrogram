@@ -46,7 +46,7 @@ class Result:
 
 
 class Session:
-    INITIAL_SALT = 0x616e67656c696361
+    INITIAL_SALT = 0x616E67656C696361
     NET_WORKERS = 1
     START_TIMEOUT = 1
     WAIT_TIMEOUT = 15
@@ -67,15 +67,10 @@ class Session:
         34: "[34] an even msg_seqno expected, but odd received",
         35: "[35] odd msg_seqno expected, but even received",
         48: "[48] incorrect server salt",
-        64: "[64] invalid container"
+        64: "[64] invalid container",
     }
 
-    def __init__(self,
-                 client: pyrogram,
-                 dc_id: int,
-                 auth_key: bytes,
-                 is_media: bool = False,
-                 is_cdn: bool = False):
+    def __init__(self, client: pyrogram, dc_id: int, auth_key: bytes, is_media: bool = False, is_cdn: bool = False):
         if not Session.notice_displayed:
             print("Pyrogram v{}, {}".format(__version__, __copyright__))
             print("Licensed under the terms of the " + __license__, end="\n\n")
@@ -119,12 +114,7 @@ class Session:
                 self.connection.connect()
 
                 for i in range(self.NET_WORKERS):
-                    self.net_worker_list.append(
-                        Thread(
-                            target=self.net_worker,
-                            name="NetWorker#{}".format(i + 1)
-                        )
-                    )
+                    self.net_worker_list.append(Thread(target=self.net_worker, name="NetWorker#{}".format(i + 1)))
 
                     self.net_worker_list[-1].start()
 
@@ -132,11 +122,7 @@ class Session:
 
                 self.current_salt = FutureSalt(0, 0, self.INITIAL_SALT)
                 self.current_salt = FutureSalt(
-                    0, 0,
-                    self._send(
-                        functions.Ping(0),
-                        timeout=self.START_TIMEOUT
-                    ).new_server_salt
+                    0, 0, self._send(functions.Ping(0), timeout=self.START_TIMEOUT).new_server_salt
                 )
                 self.current_salt = self._send(functions.GetFutureSalts(1), timeout=self.START_TIMEOUT).salts[0]
 
@@ -156,9 +142,9 @@ class Session:
                                 lang_code=self.client.lang_code,
                                 lang_pack="",
                                 query=functions.help.GetConfig(),
-                            )
+                            ),
                         ),
-                        timeout=self.START_TIMEOUT
+                        timeout=self.START_TIMEOUT,
                     )
 
                 self.ping_thread = Thread(target=self.ping, name="PingThread")
@@ -229,7 +215,7 @@ class Session:
         padding = urandom(-(len(data) + 12) % 16 + 12)
 
         # 88 = 88 + 0 (outgoing message)
-        msg_key_large = sha256(self.auth_key[88: 88 + 32] + data + padding).digest()
+        msg_key_large = sha256(self.auth_key[88 : 88 + 32] + data + padding).digest()
         msg_key = msg_key_large[8:24]
         aes_key, aes_iv = KDF(self.auth_key, msg_key, True)
 
@@ -251,7 +237,7 @@ class Session:
         # https://core.telegram.org/mtproto/security_guidelines#checking-sha256-hash-value-of-msg-key
         # https://core.telegram.org/mtproto/security_guidelines#checking-message-length
         # 96 = 88 + 8 (incoming message)
-        assert msg_key == sha256(self.auth_key[96:96 + 32] + data.getvalue()).digest()[8:24]
+        assert msg_key == sha256(self.auth_key[96 : 96 + 32] + data.getvalue()).digest()[8:24]
 
         # https://core.telegram.org/mtproto/security_guidelines#checking-msg-id
         # TODO: check for lower msg_ids
@@ -272,11 +258,7 @@ class Session:
             try:
                 data = self.unpack(BytesIO(packet))
 
-                messages = (
-                    data.body.messages
-                    if isinstance(data.body, MsgContainer)
-                    else [data]
-                )
+                messages = data.body.messages if isinstance(data.body, MsgContainer) else [data]
 
                 log.debug(data)
 
@@ -334,9 +316,7 @@ class Session:
                 break
 
             try:
-                self._send(functions.PingDelayDisconnect(
-                    0, self.WAIT_TIMEOUT + 10
-                ), False)
+                self._send(functions.PingDelayDisconnect(0, self.WAIT_TIMEOUT + 10), False)
             except (OSError, TimeoutError, Error):
                 pass
 
@@ -352,12 +332,11 @@ class Session:
             # 15 minutes before/after the current/next salt end/start time
             dt = (self.current_salt.valid_until - now).total_seconds() - 900
 
-            log.debug("Current salt: {} | Next salt in {:.0f}m {:.0f}s ({})".format(
-                self.current_salt.salt,
-                dt // 60,
-                dt % 60,
-                now + timedelta(seconds=dt)
-            ))
+            log.debug(
+                "Current salt: {} | Next salt in {:.0f}m {:.0f}s ({})".format(
+                    self.current_salt.salt, dt // 60, dt % 60, now + timedelta(seconds=dt)
+                )
+            )
 
             self.next_salt_thread_event.wait(dt)
 
@@ -380,7 +359,7 @@ class Session:
 
             if packet is None or len(packet) == 4:
                 if packet:
-                    log.warning("Server sent \"{}\"".format(Int.read(BytesIO(packet))))
+                    log.warning('Server sent "{}"'.format(Int.read(BytesIO(packet))))
 
                 if self.is_connected.is_set():
                     Thread(target=self.restart, name="RestartThread").start()
@@ -414,10 +393,9 @@ class Session:
             elif isinstance(result, types.RpcError):
                 Error.raise_it(result, type(data))
             elif isinstance(result, types.BadMsgNotification):
-                raise Exception(self.BAD_MSG_DESCRIPTION.get(
-                    result.error_code,
-                    "Error code {}".format(result.error_code)
-                ))
+                raise Exception(
+                    self.BAD_MSG_DESCRIPTION.get(result.error_code, "Error code {}".format(result.error_code))
+                )
             else:
                 return result
 
@@ -431,9 +409,8 @@ class Session:
                 raise e from None
 
             (log.warning if retries < 3 else log.info)(
-                "{}: {} Retrying {}".format(
-                    Session.MAX_RETRIES - retries,
-                    datetime.now(), type(data)))
+                "{}: {} Retrying {}".format(Session.MAX_RETRIES - retries, datetime.now(), type(data))
+            )
 
             time.sleep(0.5)
             return self.send(data, retries - 1, timeout)

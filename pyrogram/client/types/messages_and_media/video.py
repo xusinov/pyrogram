@@ -57,18 +57,20 @@ class Video(PyrogramType):
             Date the video was sent in Unix time.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 file_id: str,
-                 width: int,
-                 height: int,
-                 duration: int,
-                 thumb: PhotoSize = None,
-                 file_name: str = None,
-                 mime_type: str = None,
-                 file_size: int = None,
-                 date: int = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        file_id: str,
+        width: int,
+        height: int,
+        duration: int,
+        thumb: PhotoSize = None,
+        file_name: str = None,
+        mime_type: str = None,
+        file_size: int = None,
+        date: int = None
+    ):
         super().__init__(client)
 
         self.file_id = file_id
@@ -82,18 +84,11 @@ class Video(PyrogramType):
         self.duration = duration
 
     @staticmethod
-    def _parse(client, video: types.Document, video_attributes: types.DocumentAttributeVideo,
-               file_name: str) -> "Video":
+    def _parse(
+        client, video: types.Document, video_attributes: types.DocumentAttributeVideo, file_name: str
+    ) -> "Video":
         return Video(
-            file_id=encode(
-                pack(
-                    "<iiqq",
-                    4,
-                    video.dc_id,
-                    video.id,
-                    video.access_hash
-                )
-            ),
+            file_id=encode(pack("<iiqq", 4, video.dc_id, video.id, video.access_hash)),
             width=video_attributes.w,
             height=video_attributes.h,
             duration=video_attributes.duration,
@@ -102,5 +97,5 @@ class Video(PyrogramType):
             file_size=video.size,
             file_name=file_name,
             date=video.date,
-            client=client
+            client=client,
         )

@@ -24,15 +24,19 @@ from pyrogram.client.ext import BaseClient
 
 
 class SendGame(BaseClient):
-    def send_game(self,
-                  chat_id: Union[int, str],
-                  game_short_name: str,
-                  disable_notification: bool = None,
-                  reply_to_message_id: int = None,
-                  reply_markup: Union["pyrogram.InlineKeyboardMarkup",
-                                      "pyrogram.ReplyKeyboardMarkup",
-                                      "pyrogram.ReplyKeyboardRemove",
-                                      "pyrogram.ForceReply"] = None) -> "pyrogram.Message":
+    def send_game(
+        self,
+        chat_id: Union[int, str],
+        game_short_name: str,
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+        reply_markup: Union[
+            "pyrogram.InlineKeyboardMarkup",
+            "pyrogram.ReplyKeyboardMarkup",
+            "pyrogram.ReplyKeyboardRemove",
+            "pyrogram.ForceReply",
+        ] = None,
+    ) -> "pyrogram.Message":
         """Use this method to send a game.
 
         Args:
@@ -65,23 +69,16 @@ class SendGame(BaseClient):
             functions.messages.SendMedia(
                 peer=self.resolve_peer(chat_id),
                 media=types.InputMediaGame(
-                    id=types.InputGameShortName(
-                        bot_id=types.InputUserSelf(),
-                        short_name=game_short_name
-                    ),
+                    id=types.InputGameShortName(bot_id=types.InputUserSelf(), short_name=game_short_name)
                 ),
                 message="",
                 silent=disable_notification or None,
                 reply_to_msg_id=reply_to_message_id,
                 random_id=self.rnd_id(),
-                reply_markup=reply_markup.write() if reply_markup else None
+                reply_markup=reply_markup.write() if reply_markup else None,
             )
         )
 
         for i in r.updates:
             if isinstance(i, (types.UpdateNewMessage, types.UpdateNewChannelMessage)):
-                return pyrogram.Message._parse(
-                    self, i.message,
-                    {i.id: i for i in r.users},
-                    {i.id: i for i in r.chats}
-                )
+                return pyrogram.Message._parse(self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats})

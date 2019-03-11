@@ -29,13 +29,15 @@ log = logging.getLogger(__name__)
 
 
 class GetHistory(BaseClient):
-    def get_history(self,
-                    chat_id: Union[int, str],
-                    limit: int = 100,
-                    offset: int = 0,
-                    offset_id: int = 0,
-                    offset_date: int = 0,
-                    reverse: bool = False):
+    def get_history(
+        self,
+        chat_id: Union[int, str],
+        limit: int = 100,
+        offset: int = 0,
+        offset_id: int = 0,
+        offset_date: int = 0,
+        reverse: bool = False,
+    ):
         """Use this method to retrieve a chunk of the history of a chat.
 
         You can get up to 100 messages at once.
@@ -84,9 +86,9 @@ class GetHistory(BaseClient):
                             limit=limit,
                             max_id=0,
                             min_id=0,
-                            hash=0
+                            hash=0,
                         )
-                    )
+                    ),
                 )
             except FloodWait as e:
                 log.warning("Sleeping for {}s".format(e.x))

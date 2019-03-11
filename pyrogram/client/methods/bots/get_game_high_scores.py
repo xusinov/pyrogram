@@ -24,10 +24,7 @@ from pyrogram.client.ext import BaseClient
 
 
 class GetGameHighScores(BaseClient):
-    def get_game_high_scores(self,
-                             user_id: Union[int, str],
-                             chat_id: Union[int, str],
-                             message_id: int = None):
+    def get_game_high_scores(self, user_id: Union[int, str], chat_id: Union[int, str], message_id: int = None):
         """Use this method to get data for high score tables.
 
         Args:
@@ -58,9 +55,7 @@ class GetGameHighScores(BaseClient):
             self,
             self.send(
                 functions.messages.GetGameHighScores(
-                    peer=self.resolve_peer(chat_id),
-                    id=message_id,
-                    user_id=self.resolve_peer(user_id)
+                    peer=self.resolve_peer(chat_id), id=message_id, user_id=self.resolve_peer(user_id)
                 )
-            )
+            ),
         )

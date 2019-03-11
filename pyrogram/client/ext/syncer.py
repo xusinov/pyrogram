@@ -86,7 +86,7 @@ class Syncer:
 
         try:
             auth_key = base64.b64encode(client.auth_key).decode()
-            auth_key = [auth_key[i: i + 43] for i in range(0, len(auth_key), 43)]
+            auth_key = [auth_key[i : i + 43] for i in range(0, len(auth_key), 43)]
 
             data = dict(
                 dc_id=client.dc_id,
@@ -95,18 +95,9 @@ class Syncer:
                 user_id=client.user_id,
                 date=int(time.time()),
                 is_bot=client.is_bot,
-                peers_by_id={
-                    k: getattr(v, "access_hash", None)
-                    for k, v in client.peers_by_id.copy().items()
-                },
-                peers_by_username={
-                    k: utils.get_peer_id(v)
-                    for k, v in client.peers_by_username.copy().items()
-                },
-                peers_by_phone={
-                    k: utils.get_peer_id(v)
-                    for k, v in client.peers_by_phone.copy().items()
-                }
+                peers_by_id={k: getattr(v, "access_hash", None) for k, v in client.peers_by_id.copy().items()},
+                peers_by_username={k: utils.get_peer_id(v) for k, v in client.peers_by_username.copy().items()},
+                peers_by_phone={k: utils.get_peer_id(v) for k, v in client.peers_by_phone.copy().items()},
             )
 
             os.makedirs(client.workdir, exist_ok=True)

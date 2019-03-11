@@ -33,11 +33,7 @@ class Location(PyrogramType):
             Latitude as defined by sender.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 longitude: float,
-                 latitude: float):
+    def __init__(self, *, client: "pyrogram.client.ext.BaseClient", longitude: float, latitude: float):
         super().__init__(client)
 
         self.longitude = longitude
@@ -46,8 +42,4 @@ class Location(PyrogramType):
     @staticmethod
     def _parse(client, geo_point: types.GeoPoint) -> "Location":
         if isinstance(geo_point, types.GeoPoint):
-            return Location(
-                longitude=geo_point.long,
-                latitude=geo_point.lat,
-                client=client
-            )
+            return Location(longitude=geo_point.long, latitude=geo_point.lat, client=client)

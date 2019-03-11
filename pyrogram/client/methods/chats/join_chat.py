@@ -22,8 +22,7 @@ from ...ext import BaseClient
 
 
 class JoinChat(BaseClient):
-    def join_chat(self,
-                  chat_id: str):
+    def join_chat(self, chat_id: str):
         """Use this method to join a group chat or channel.
 
         Args:
@@ -40,31 +39,18 @@ class JoinChat(BaseClient):
         match = self.INVITE_LINK_RE.match(chat_id)
 
         if match:
-            chat = self.send(
-                functions.messages.ImportChatInvite(
-                    hash=match.group(1)
-                )
-            )
+            chat = self.send(functions.messages.ImportChatInvite(hash=match.group(1)))
             if isinstance(chat.chats[0], types.Chat):
                 return pyrogram.Chat._parse_chat_chat(self, chat.chats[0])
             elif isinstance(chat.chats[0], types.Channel):
                 return pyrogram.Chat._parse_channel_chat(self, chat.chats[0])
         else:
-            resolved_peer = self.send(
-                functions.contacts.ResolveUsername(
-                    username=chat_id.lower().strip("@")
-                )
-            )
+            resolved_peer = self.send(functions.contacts.ResolveUsername(username=chat_id.lower().strip("@")))
 
             channel = types.InputPeerChannel(
-                channel_id=resolved_peer.chats[0].id,
-                access_hash=resolved_peer.chats[0].access_hash
+                channel_id=resolved_peer.chats[0].id, access_hash=resolved_peer.chats[0].access_hash
             )
 
-            chat = self.send(
-                functions.channels.JoinChannel(
-                    channel=channel
-                )
-            )
+            chat = self.send(functions.channels.JoinChannel(channel=channel))
 
             return pyrogram.Chat._parse_channel_chat(self, chat.chats[0])

@@ -24,8 +24,7 @@ from ...ext import BaseClient
 
 
 class GetChat(BaseClient):
-    def get_chat(self,
-                 chat_id: Union[int, str]) -> "pyrogram.Chat":
+    def get_chat(self, chat_id: Union[int, str]) -> "pyrogram.Chat":
         """Use this method to get up to date information about the chat (current name of the user for
         one-on-one conversations, current username of a user, group or channel, etc.)
 
@@ -47,14 +46,10 @@ class GetChat(BaseClient):
         if match:
             h = match.group(1)
 
-            r = self.send(
-                functions.messages.CheckChatInvite(
-                    hash=h
-                )
-            )
+            r = self.send(functions.messages.CheckChatInvite(hash=h))
 
             if isinstance(r, types.ChatInvite):
-                raise ValueError("You haven't joined \"t.me/joinchat/{}\" yet".format(h))
+                raise ValueError('You haven\'t joined "t.me/joinchat/{}" yet'.format(h))
 
             self.fetch_peers([r.chat])
 

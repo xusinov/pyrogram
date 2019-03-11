@@ -36,11 +36,7 @@ class Dialogs(PyrogramType):
             Requested dialogs.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 total_count: int,
-                 dialogs: List[Dialog]):
+    def __init__(self, *, client: "pyrogram.client.ext.BaseClient", total_count: int, dialogs: List[Dialog]):
         super().__init__(client)
 
         self.total_count = total_count
@@ -71,5 +67,5 @@ class Dialogs(PyrogramType):
         return Dialogs(
             total_count=getattr(dialogs, "count", len(dialogs.dialogs)),
             dialogs=[Dialog._parse(client, dialog, messages, users, chats) for dialog in dialogs.dialogs],
-            client=client
+            client=client,
         )

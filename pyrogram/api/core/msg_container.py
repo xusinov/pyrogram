@@ -24,7 +24,7 @@ from .primitives import Int
 
 
 class MsgContainer(Object):
-    ID = 0x73f1f8dc
+    ID = 0x73F1F8DC
 
     def __init__(self, messages: list):
         self.messages = messages

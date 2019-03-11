@@ -18,10 +18,7 @@
 
 
 class InputMedia:
-    def __init__(self,
-                 media: str,
-                 caption: str,
-                 parse_mode: str):
+    def __init__(self, media: str, caption: str, parse_mode: str):
         self.media = media
         self.caption = caption
         self.parse_mode = parse_mode

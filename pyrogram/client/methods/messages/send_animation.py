@@ -28,23 +28,27 @@ from pyrogram.client.ext import BaseClient, utils
 
 
 class SendAnimation(BaseClient):
-    def send_animation(self,
-                       chat_id: Union[int, str],
-                       animation: str,
-                       caption: str = "",
-                       parse_mode: str = "",
-                       duration: int = 0,
-                       width: int = 0,
-                       height: int = 0,
-                       thumb: str = None,
-                       disable_notification: bool = None,
-                       reply_to_message_id: int = None,
-                       reply_markup: Union["pyrogram.InlineKeyboardMarkup",
-                                           "pyrogram.ReplyKeyboardMarkup",
-                                           "pyrogram.ReplyKeyboardRemove",
-                                           "pyrogram.ForceReply"] = None,
-                       progress: callable = None,
-                       progress_args: tuple = ()) -> Union["pyrogram.Message", None]:
+    def send_animation(
+        self,
+        chat_id: Union[int, str],
+        animation: str,
+        caption: str = "",
+        parse_mode: str = "",
+        duration: int = 0,
+        width: int = 0,
+        height: int = 0,
+        thumb: str = None,
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+        reply_markup: Union[
+            "pyrogram.InlineKeyboardMarkup",
+            "pyrogram.ReplyKeyboardMarkup",
+            "pyrogram.ReplyKeyboardRemove",
+            "pyrogram.ForceReply",
+        ] = None,
+        progress: callable = None,
+        progress_args: tuple = (),
+    ) -> Union["pyrogram.Message", None]:
         """Use this method to send animation files (animation or H.264/MPEG-4 AVC video without sound).
 
         Args:
@@ -135,20 +139,13 @@ class SendAnimation(BaseClient):
                     file=file,
                     thumb=thumb,
                     attributes=[
-                        types.DocumentAttributeVideo(
-                            supports_streaming=True,
-                            duration=duration,
-                            w=width,
-                            h=height
-                        ),
+                        types.DocumentAttributeVideo(supports_streaming=True, duration=duration, w=width, h=height),
                         types.DocumentAttributeFilename(os.path.basename(animation)),
-                        types.DocumentAttributeAnimated()
-                    ]
+                        types.DocumentAttributeAnimated(),
+                    ],
                 )
             elif animation.startswith("http"):
-                media = types.InputMediaDocumentExternal(
-                    url=animation
-                )
+                media = types.InputMediaDocumentExternal(url=animation)
             else:
                 try:
                     decoded = utils.decode(animation)
@@ -166,11 +163,7 @@ class SendAnimation(BaseClient):
                             raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                     media = types.InputMediaDocument(
-                        id=types.InputDocument(
-                            id=unpacked[2],
-                            access_hash=unpacked[3],
-                            file_reference=b""
-                        )
+                        id=types.InputDocument(id=unpacked[2], access_hash=unpacked[3], file_reference=b"")
                     )
 
             while True:
@@ -192,9 +185,7 @@ class SendAnimation(BaseClient):
                     for i in r.updates:
                         if isinstance(i, (types.UpdateNewMessage, types.UpdateNewChannelMessage)):
                             return pyrogram.Message._parse(
-                                self, i.message,
-                                {i.id: i for i in r.users},
-                                {i.id: i for i in r.chats}
+                                self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats}
                             )
         except BaseClient.StopTransmission:
             return None

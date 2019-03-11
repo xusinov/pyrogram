@@ -30,25 +30,13 @@ log = logging.getLogger(__name__)
 
 
 class Dispatcher:
-    NEW_MESSAGE_UPDATES = (
-        types.UpdateNewMessage,
-        types.UpdateNewChannelMessage
-    )
+    NEW_MESSAGE_UPDATES = (types.UpdateNewMessage, types.UpdateNewChannelMessage)
 
-    EDIT_MESSAGE_UPDATES = (
-        types.UpdateEditMessage,
-        types.UpdateEditChannelMessage
-    )
+    EDIT_MESSAGE_UPDATES = (types.UpdateEditMessage, types.UpdateEditChannelMessage)
 
-    DELETE_MESSAGES_UPDATES = (
-        types.UpdateDeleteMessages,
-        types.UpdateDeleteChannelMessages
-    )
+    DELETE_MESSAGES_UPDATES = (types.UpdateDeleteMessages, types.UpdateDeleteChannelMessages)
 
-    CALLBACK_QUERY_UPDATES = (
-        types.UpdateBotCallbackQuery,
-        types.UpdateInlineBotCallbackQuery
-    )
+    CALLBACK_QUERY_UPDATES = (types.UpdateBotCallbackQuery, types.UpdateInlineBotCallbackQuery)
 
     MESSAGE_UPDATES = NEW_MESSAGE_UPDATES + EDIT_MESSAGE_UPDATES
 
@@ -61,31 +49,29 @@ class Dispatcher:
         self.groups = OrderedDict()
 
         self.update_parsers = {
-            Dispatcher.MESSAGE_UPDATES:
-                lambda upd, usr, cht: (pyrogram.Message._parse(self.client, upd.message, usr, cht), MessageHandler),
-
-            Dispatcher.DELETE_MESSAGES_UPDATES:
-                lambda upd, usr, cht: (pyrogram.Messages._parse_deleted(self.client, upd), DeletedMessagesHandler),
-
-            Dispatcher.CALLBACK_QUERY_UPDATES:
-                lambda upd, usr, cht: (pyrogram.CallbackQuery._parse(self.client, upd, usr), CallbackQueryHandler),
-
-            (types.UpdateUserStatus,):
-                lambda upd, usr, cht: (
-                    pyrogram.UserStatus._parse(self.client, upd.status, upd.user_id), UserStatusHandler
-                )
+            Dispatcher.MESSAGE_UPDATES: lambda upd, usr, cht: (
+                pyrogram.Message._parse(self.client, upd.message, usr, cht),
+                MessageHandler,
+            ),
+            Dispatcher.DELETE_MESSAGES_UPDATES: lambda upd, usr, cht: (
+                pyrogram.Messages._parse_deleted(self.client, upd),
+                DeletedMessagesHandler,
+            ),
+            Dispatcher.CALLBACK_QUERY_UPDATES: lambda upd, usr, cht: (
+                pyrogram.CallbackQuery._parse(self.client, upd, usr),
+                CallbackQueryHandler,
+            ),
+            (types.UpdateUserStatus,): lambda upd, usr, cht: (
+                pyrogram.UserStatus._parse(self.client, upd.status, upd.user_id),
+                UserStatusHandler,
+            ),
         }
 
         self.update_parsers = {key: value for key_tuple, value in self.update_parsers.items() for key in key_tuple}
 
     def start(self):
         for i in range(self.workers):
-            self.workers_list.append(
-                Thread(
-                    target=self.update_worker,
-                    name="UpdateWorker#{}".format(i + 1)
-                )
-            )
+            self.workers_list.append(Thread(target=self.update_worker, name="UpdateWorker#{}".format(i + 1)))
 
             self.workers_list[-1].start()
 
@@ -128,11 +114,7 @@ class Dispatcher:
 
                 parser = self.update_parsers.get(type(update), None)
 
-                parsed_update, handler_type = (
-                    parser(update, users, chats)
-                    if parser is not None
-                    else (None, type(None))
-                )
+                parsed_update, handler_type = parser(update, users, chats) if parser is not None else (None, type(None))
 
                 for group in self.groups.values():
                     for handler in group:

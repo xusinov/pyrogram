@@ -47,15 +47,17 @@ class Voice(PyrogramType):
             Date the voice was sent in Unix time.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 file_id: str,
-                 duration: int,
-                 waveform: bytes = None,
-                 mime_type: str = None,
-                 file_size: int = None,
-                 date: int = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        file_id: str,
+        duration: int,
+        waveform: bytes = None,
+        mime_type: str = None,
+        file_size: int = None,
+        date: int = None
+    ):
         super().__init__(client)
 
         self.file_id = file_id
@@ -68,19 +70,11 @@ class Voice(PyrogramType):
     @staticmethod
     def _parse(client, voice: types.Document, attributes: types.DocumentAttributeAudio) -> "Voice":
         return Voice(
-            file_id=encode(
-                pack(
-                    "<iiqq",
-                    3,
-                    voice.dc_id,
-                    voice.id,
-                    voice.access_hash
-                )
-            ),
+            file_id=encode(pack("<iiqq", 3, voice.dc_id, voice.id, voice.access_hash)),
             duration=attributes.duration,
             mime_type=voice.mime_type,
             file_size=voice.size,
             waveform=attributes.waveform,
             date=voice.date,
-            client=client
+            client=client,
         )

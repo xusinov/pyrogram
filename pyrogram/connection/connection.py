@@ -29,13 +29,7 @@ log = logging.getLogger(__name__)
 class Connection:
     MAX_RETRIES = 3
 
-    MODES = {
-        0: TCPFull,
-        1: TCPAbridged,
-        2: TCPIntermediate,
-        3: TCPAbridgedO,
-        4: TCPIntermediateO
-    }
+    MODES = {0: TCPFull, 1: TCPAbridged, 2: TCPIntermediate, 3: TCPAbridgedO, 4: TCPIntermediateO}
 
     def __init__(self, dc_id: int, test_mode: bool, ipv6: bool, proxy: dict, mode: int = 3):
         self.dc_id = dc_id
@@ -59,11 +53,9 @@ class Connection:
                 self.connection.close()
                 time.sleep(1)
             else:
-                log.info("Connected! DC{} - IPv{} - {}".format(
-                    self.dc_id,
-                    "6" if self.ipv6 else "4",
-                    self.mode.__name__
-                ))
+                log.info(
+                    "Connected! DC{} - IPv{} - {}".format(self.dc_id, "6" if self.ipv6 else "4", self.mode.__name__)
+                )
                 break
         else:
             log.warning("Connection failed! Trying again...")

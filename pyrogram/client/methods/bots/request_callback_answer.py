@@ -23,10 +23,7 @@ from pyrogram.client.ext import BaseClient
 
 
 class RequestCallbackAnswer(BaseClient):
-    def request_callback_answer(self,
-                                chat_id: Union[int, str],
-                                message_id: int,
-                                callback_data: bytes):
+    def request_callback_answer(self, chat_id: Union[int, str], message_id: int, callback_data: bytes):
         """Use this method to request a callback answer from bots. This is the equivalent of clicking an
         inline button containing callback data.
 
@@ -52,10 +49,8 @@ class RequestCallbackAnswer(BaseClient):
         """
         return self.send(
             functions.messages.GetBotCallbackAnswer(
-                peer=self.resolve_peer(chat_id),
-                msg_id=message_id,
-                data=callback_data
+                peer=self.resolve_peer(chat_id), msg_id=message_id, data=callback_data
             ),
             retries=0,
-            timeout=10
+            timeout=10,
         )

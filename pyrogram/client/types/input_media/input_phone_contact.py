@@ -35,19 +35,10 @@ class InputPhoneContact:
             Contact's last name
     """
 
-    def __init__(self,
-                 phone: str,
-                 first_name: str,
-                 last_name: str = ""):
+    def __init__(self, phone: str, first_name: str, last_name: str = ""):
         pass
 
-    def __new__(cls,
-                phone: str,
-                first_name: str,
-                last_name: str = ""):
+    def __new__(cls, phone: str, first_name: str, last_name: str = ""):
         return RawInputPhoneContact(
-            client_id=MsgId(),
-            phone="+" + phone.strip("+"),
-            first_name=first_name,
-            last_name=last_name
+            client_id=MsgId(), phone="+" + phone.strip("+"), first_name=first_name, last_name=last_name
         )

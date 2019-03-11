@@ -34,12 +34,7 @@ class PollOption(PyrogramType):
             Unique data that identifies this option among all the other options in a poll.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 text: str,
-                 voters: int,
-                 data: bytes):
+    def __init__(self, *, client: "pyrogram.client.ext.BaseClient", text: str, voters: int, data: bytes):
         super().__init__(client)
 
         self.text = text

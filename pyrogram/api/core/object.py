@@ -83,8 +83,7 @@ class Encoder(JSONEncoder):
                 return r
             else:
                 return OrderedDict(
-                    [("_", o.replace("pyrogram.api.types.", "telegram:"))]
-                    + [i for i in content.items()]
+                    [("_", o.replace("pyrogram.api.types.", "telegram:"))] + [i for i in content.items()]
                 )
         else:
             return None

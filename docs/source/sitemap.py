@@ -28,7 +28,7 @@ dirs = {
     "pyrogram": ("weekly", 0.8),
     "functions": ("monthly", 0.7),
     "types": ("monthly", 0.7),
-    "errors": ("weekly", 0.6)
+    "errors": ("weekly", 0.6),
 }
 
 
@@ -37,11 +37,10 @@ def now():
 
 
 with open("sitemap.xml", "w") as f:
-    f.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
-    f.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n")
+    f.write('<?xml version="1.0" encoding="utf-8"?>\n')
+    f.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
 
     urls = [(canonical, now(), "weekly", 1.0)]
-
 
     def search(path):
         try:
@@ -52,7 +51,6 @@ with open("sitemap.xml", "w") as f:
             path = "{}/{}".format(canonical, path.split(".")[0])
             path = re.sub("^(.+)/index$", "\g<1>", path)
             urls.append((path, now(), dirs[d][0], dirs[d][1]))
-
 
     for i in dirs.keys():
         search(i)

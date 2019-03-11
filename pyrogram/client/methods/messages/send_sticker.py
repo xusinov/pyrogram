@@ -28,17 +28,21 @@ from pyrogram.client.ext import BaseClient, utils
 
 
 class SendSticker(BaseClient):
-    def send_sticker(self,
-                     chat_id: Union[int, str],
-                     sticker: str,
-                     disable_notification: bool = None,
-                     reply_to_message_id: int = None,
-                     reply_markup: Union["pyrogram.InlineKeyboardMarkup",
-                                         "pyrogram.ReplyKeyboardMarkup",
-                                         "pyrogram.ReplyKeyboardRemove",
-                                         "pyrogram.ForceReply"] = None,
-                     progress: callable = None,
-                     progress_args: tuple = ()) -> Union["pyrogram.Message", None]:
+    def send_sticker(
+        self,
+        chat_id: Union[int, str],
+        sticker: str,
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+        reply_markup: Union[
+            "pyrogram.InlineKeyboardMarkup",
+            "pyrogram.ReplyKeyboardMarkup",
+            "pyrogram.ReplyKeyboardRemove",
+            "pyrogram.ForceReply",
+        ] = None,
+        progress: callable = None,
+        progress_args: tuple = (),
+    ) -> Union["pyrogram.Message", None]:
         """Use this method to send .webp stickers.
 
         Args:
@@ -102,14 +106,10 @@ class SendSticker(BaseClient):
                 media = types.InputMediaUploadedDocument(
                     mime_type="image/webp",
                     file=file,
-                    attributes=[
-                        types.DocumentAttributeFilename(os.path.basename(sticker))
-                    ]
+                    attributes=[types.DocumentAttributeFilename(os.path.basename(sticker))],
                 )
             elif sticker.startswith("http"):
-                media = types.InputMediaDocumentExternal(
-                    url=sticker
-                )
+                media = types.InputMediaDocumentExternal(url=sticker)
             else:
                 try:
                     decoded = utils.decode(sticker)
@@ -127,11 +127,7 @@ class SendSticker(BaseClient):
                             raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                     media = types.InputMediaDocument(
-                        id=types.InputDocument(
-                            id=unpacked[2],
-                            access_hash=unpacked[3],
-                            file_reference=b""
-                        )
+                        id=types.InputDocument(id=unpacked[2], access_hash=unpacked[3], file_reference=b"")
                     )
 
             while True:
@@ -144,7 +140,7 @@ class SendSticker(BaseClient):
                             reply_to_msg_id=reply_to_message_id,
                             random_id=self.rnd_id(),
                             reply_markup=reply_markup.write() if reply_markup else None,
-                            message=""
+                            message="",
                         )
                     )
                 except FilePartMissing as e:
@@ -153,9 +149,7 @@ class SendSticker(BaseClient):
                     for i in r.updates:
                         if isinstance(i, (types.UpdateNewMessage, types.UpdateNewChannelMessage)):
                             return pyrogram.Message._parse(
-                                self, i.message,
-                                {i.id: i for i in r.users},
-                                {i.id: i for i in r.chats}
+                                self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats}
                             )
         except BaseClient.StopTransmission:
             return None

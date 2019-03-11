@@ -24,12 +24,5 @@ from .on_raw_update import OnRawUpdate
 from .on_user_status import OnUserStatus
 
 
-class Decorators(
-    OnMessage,
-    OnDeletedMessages,
-    OnCallbackQuery,
-    OnRawUpdate,
-    OnDisconnect,
-    OnUserStatus
-):
+class Decorators(OnMessage, OnDeletedMessages, OnCallbackQuery, OnRawUpdate, OnDisconnect, OnUserStatus):
     pass

@@ -23,9 +23,7 @@ from ...ext import BaseClient
 
 
 class SetChatDescription(BaseClient):
-    def set_chat_description(self,
-                             chat_id: Union[int, str],
-                             description: str) -> bool:
+    def set_chat_description(self, chat_id: Union[int, str], description: str) -> bool:
         """Use this method to change the description of a supergroup or a channel.
         You must be an administrator in the chat for this to work and must have the appropriate admin rights.
 
@@ -46,15 +44,10 @@ class SetChatDescription(BaseClient):
         peer = self.resolve_peer(chat_id)
 
         if isinstance(peer, types.InputPeerChannel):
-            self.send(
-                functions.channels.EditAbout(
-                    channel=peer,
-                    about=description
-                )
-            )
+            self.send(functions.channels.EditAbout(channel=peer, about=description))
         elif isinstance(peer, types.InputPeerChat):
-            raise ValueError("The chat_id \"{}\" belongs to a basic group".format(chat_id))
+            raise ValueError('The chat_id "{}" belongs to a basic group'.format(chat_id))
         else:
-            raise ValueError("The chat_id \"{}\" belongs to a user".format(chat_id))
+            raise ValueError('The chat_id "{}" belongs to a user'.format(chat_id))
 
         return True

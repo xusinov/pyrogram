@@ -23,10 +23,7 @@ import socket
 try:
     import socks
 except ImportError as e:
-    e.msg = (
-        "PySocks is missing and Pyrogram can't run without. "
-        "Please install it using \"pip3 install pysocks\"."
-    )
+    e.msg = "PySocks is missing and Pyrogram can't run without. " 'Please install it using "pip3 install pysocks".'
 
     raise e
 
@@ -54,15 +51,12 @@ class TCP(socks.socksocket):
                 addr=hostname,
                 port=port,
                 username=proxy.get("username", None),
-                password=proxy.get("password", None)
+                password=proxy.get("password", None),
             )
 
             log.info("Using proxy {}:{}".format(hostname, port))
         else:
-            super().__init__(
-                socket.AF_INET6 if ipv6
-                else socket.AF_INET
-            )
+            super().__init__(socket.AF_INET6 if ipv6 else socket.AF_INET)
 
         self.settimeout(10)
 

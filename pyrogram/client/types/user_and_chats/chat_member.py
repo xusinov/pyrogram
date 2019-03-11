@@ -94,29 +94,31 @@ class ChatMember(PyrogramType):
             Restricted only. True, if user may add web page previews to his messages, implies can_send_media_messages.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 user: "pyrogram.User",
-                 status: str,
-                 date: int = None,
-                 invited_by: "pyrogram.User" = None,
-                 promoted_by: "pyrogram.User" = None,
-                 restricted_by: "pyrogram.User" = None,
-                 until_date: int = None,
-                 can_be_edited: bool = None,
-                 can_change_info: bool = None,
-                 can_post_messages: bool = None,
-                 can_edit_messages: bool = None,
-                 can_delete_messages: bool = None,
-                 can_invite_users: bool = None,
-                 can_restrict_members: bool = None,
-                 can_pin_messages: bool = None,
-                 can_promote_members: bool = None,
-                 can_send_messages: bool = None,
-                 can_send_media_messages: bool = None,
-                 can_send_other_messages: bool = None,
-                 can_add_web_page_previews: bool = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        user: "pyrogram.User",
+        status: str,
+        date: int = None,
+        invited_by: "pyrogram.User" = None,
+        promoted_by: "pyrogram.User" = None,
+        restricted_by: "pyrogram.User" = None,
+        until_date: int = None,
+        can_be_edited: bool = None,
+        can_change_info: bool = None,
+        can_post_messages: bool = None,
+        can_edit_messages: bool = None,
+        can_delete_messages: bool = None,
+        can_invite_users: bool = None,
+        can_restrict_members: bool = None,
+        can_pin_messages: bool = None,
+        can_promote_members: bool = None,
+        can_send_messages: bool = None,
+        can_send_media_messages: bool = None,
+        can_send_other_messages: bool = None,
+        can_add_web_page_previews: bool = None
+    ):
         super().__init__(client)
 
         self.user = user
@@ -172,7 +174,7 @@ class ChatMember(PyrogramType):
                 can_restrict_members=rights.ban_users,
                 can_pin_messages=rights.pin_messages,
                 can_promote_members=rights.add_admins,
-                client=client
+                client=client,
             )
 
         if isinstance(member, types.ChannelParticipantBanned):
@@ -180,23 +182,18 @@ class ChatMember(PyrogramType):
 
             chat_member = ChatMember(
                 user=user,
-                status=(
-                    "kicked" if rights.view_messages
-                    else "left" if member.left
-                    else "restricted"
-                ),
+                status=("kicked" if rights.view_messages else "left" if member.left else "restricted"),
                 date=member.date,
                 restricted_by=pyrogram.User._parse(client, users[member.kicked_by]),
                 until_date=0 if rights.until_date == (1 << 31) - 1 else rights.until_date,
-                client=client
+                client=client,
             )
 
             if chat_member.status == "restricted":
                 chat_member.can_send_messages = not rights.send_messages
                 chat_member.can_send_media_messages = not rights.send_media
                 chat_member.can_send_other_messages = (
-                        not rights.send_stickers or not rights.send_gifs or
-                        not rights.send_games or not rights.send_inline
+                    not rights.send_stickers or not rights.send_gifs or not rights.send_games or not rights.send_inline
                 )
                 chat_member.can_add_web_page_previews = not rights.embed_links
 

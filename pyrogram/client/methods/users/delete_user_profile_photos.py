@@ -25,8 +25,7 @@ from ...ext import BaseClient
 
 
 class DeleteUserProfilePhotos(BaseClient):
-    def delete_user_profile_photos(self,
-                                   id: Union[str, List[str]]) -> bool:
+    def delete_user_profile_photos(self, id: Union[str, List[str]]) -> bool:
         """Use this method to delete your own profile photos
 
         Args:
@@ -46,16 +45,6 @@ class DeleteUserProfilePhotos(BaseClient):
         for i in id:
             s = unpack("<qq", b64decode(i + "=" * (-len(i) % 4), "-_"))
 
-            input_photos.append(
-                types.InputPhoto(
-                    id=s[0],
-                    access_hash=s[1],
-                    file_reference=b""
-                )
-            )
+            input_photos.append(types.InputPhoto(id=s[0], access_hash=s[1], file_reference=b""))
 
-        return bool(self.send(
-            functions.photos.DeletePhotos(
-                id=input_photos
-            )
-        ))
+        return bool(self.send(functions.photos.DeletePhotos(id=input_photos)))

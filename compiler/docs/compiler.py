@@ -64,9 +64,7 @@ def generate(source_path, base):
                         page_template.format(
                             title=name,
                             title_markup="=" * len(name),
-                            full_class_path="pyrogram.api.{}".format(
-                                os.path.splitext(full_path)[0].replace("/", ".")
-                            )
+                            full_class_path="pyrogram.api.{}".format(os.path.splitext(full_path)[0].replace("/", ".")),
                         )
                     )
 
@@ -101,10 +99,7 @@ def generate(source_path, base):
 
             f.write(
                 toctree.format(
-                    title=k.title(),
-                    title_markup="=" * len(k),
-                    module=module,
-                    entities="\n    ".join(entities)
+                    title=k.title(), title_markup="=" * len(k), module=module, entities="\n    ".join(entities)
                 )
             )
 

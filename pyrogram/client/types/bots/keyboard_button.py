@@ -40,10 +40,7 @@ class KeyboardButton(PyrogramType):
             Available in private chats only.
     """
 
-    def __init__(self,
-                 text: str,
-                 request_contact: bool = None,
-                 request_location: bool = None):
+    def __init__(self, text: str, request_contact: bool = None, request_location: bool = None):
         super().__init__(None)
 
         self.text = str(text)
@@ -56,16 +53,10 @@ class KeyboardButton(PyrogramType):
             return o.text
 
         if isinstance(o, KeyboardButtonRequestPhone):
-            return KeyboardButton(
-                text=o.text,
-                request_contact=True
-            )
+            return KeyboardButton(text=o.text, request_contact=True)
 
         if isinstance(o, KeyboardButtonRequestGeoLocation):
-            return KeyboardButton(
-                text=o.text,
-                request_location=True
-            )
+            return KeyboardButton(text=o.text, request_location=True)
 
     def write(self):
         # TODO: Enforce optional args mutual exclusiveness

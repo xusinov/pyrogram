@@ -26,18 +26,23 @@ from pyrogram.api import functions, types
 from pyrogram.api.errors import FileIdInvalid
 from pyrogram.client.ext import BaseClient, utils
 from pyrogram.client.types import (
-    InputMediaPhoto, InputMediaVideo, InputMediaAudio,
-    InputMediaAnimation, InputMediaDocument
+    InputMediaPhoto,
+    InputMediaVideo,
+    InputMediaAudio,
+    InputMediaAnimation,
+    InputMediaDocument,
 )
 from pyrogram.client.types.input_media import InputMedia
 
 
 class EditMessageMedia(BaseClient):
-    def edit_message_media(self,
-                           chat_id: Union[int, str],
-                           message_id: int,
-                           media: InputMedia,
-                           reply_markup: "pyrogram.InlineKeyboardMarkup" = None) -> "pyrogram.Message":
+    def edit_message_media(
+        self,
+        chat_id: Union[int, str],
+        message_id: int,
+        media: InputMedia,
+        reply_markup: "pyrogram.InlineKeyboardMarkup" = None,
+    ) -> "pyrogram.Message":
         """Use this method to edit audio, document, photo, or video messages.
 
         If a message is a part of a message album, then it can be edited only to a photo or a video. Otherwise,
@@ -74,23 +79,15 @@ class EditMessageMedia(BaseClient):
                 media = self.send(
                     functions.messages.UploadMedia(
                         peer=self.resolve_peer(chat_id),
-                        media=types.InputMediaUploadedPhoto(
-                            file=self.save_file(media.media)
-                        )
+                        media=types.InputMediaUploadedPhoto(file=self.save_file(media.media)),
                     )
                 )
 
                 media = types.InputMediaPhoto(
-                    id=types.InputPhoto(
-                        id=media.photo.id,
-                        access_hash=media.photo.access_hash,
-                        file_reference=b""
-                    )
+                    id=types.InputPhoto(id=media.photo.id, access_hash=media.photo.access_hash, file_reference=b"")
                 )
             elif media.media.startswith("http"):
-                media = types.InputMediaPhotoExternal(
-                    url=media.media
-                )
+                media = types.InputMediaPhotoExternal(url=media.media)
             else:
                 try:
                     decoded = utils.decode(media.media)
@@ -108,11 +105,7 @@ class EditMessageMedia(BaseClient):
                             raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                     media = types.InputMediaPhoto(
-                        id=types.InputPhoto(
-                            id=unpacked[2],
-                            access_hash=unpacked[3],
-                            file_reference=b""
-                        )
+                        id=types.InputPhoto(id=unpacked[2], access_hash=unpacked[3], file_reference=b"")
                     )
 
         if isinstance(media, InputMediaVideo):
@@ -129,25 +122,21 @@ class EditMessageMedia(BaseClient):
                                     supports_streaming=media.supports_streaming or None,
                                     duration=media.duration,
                                     w=media.width,
-                                    h=media.height
+                                    h=media.height,
                                 ),
-                                types.DocumentAttributeFilename(os.path.basename(media.media))
-                            ]
-                        )
+                                types.DocumentAttributeFilename(os.path.basename(media.media)),
+                            ],
+                        ),
                     )
                 )
 
                 media = types.InputMediaDocument(
                     id=types.InputDocument(
-                        id=media.document.id,
-                        access_hash=media.document.access_hash,
-                        file_reference=b""
+                        id=media.document.id, access_hash=media.document.access_hash, file_reference=b""
                     )
                 )
             elif media.media.startswith("http"):
-                media = types.InputMediaDocumentExternal(
-                    url=media.media
-                )
+                media = types.InputMediaDocumentExternal(url=media.media)
             else:
                 try:
                     decoded = utils.decode(media.media)
@@ -165,11 +154,7 @@ class EditMessageMedia(BaseClient):
                             raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                     media = types.InputMediaDocument(
-                        id=types.InputDocument(
-                            id=unpacked[2],
-                            access_hash=unpacked[3],
-                            file_reference=b""
-                        )
+                        id=types.InputDocument(id=unpacked[2], access_hash=unpacked[3], file_reference=b"")
                     )
 
         if isinstance(media, InputMediaAudio):
@@ -183,27 +168,21 @@ class EditMessageMedia(BaseClient):
                             file=self.save_file(media.media),
                             attributes=[
                                 types.DocumentAttributeAudio(
-                                    duration=media.duration,
-                                    performer=media.performer,
-                                    title=media.title
+                                    duration=media.duration, performer=media.performer, title=media.title
                                 ),
-                                types.DocumentAttributeFilename(os.path.basename(media.media))
-                            ]
-                        )
+                                types.DocumentAttributeFilename(os.path.basename(media.media)),
+                            ],
+                        ),
                     )
                 )
 
                 media = types.InputMediaDocument(
                     id=types.InputDocument(
-                        id=media.document.id,
-                        access_hash=media.document.access_hash,
-                        file_reference=b""
+                        id=media.document.id, access_hash=media.document.access_hash, file_reference=b""
                     )
                 )
             elif media.media.startswith("http"):
-                media = types.InputMediaDocumentExternal(
-                    url=media.media
-                )
+                media = types.InputMediaDocumentExternal(url=media.media)
             else:
                 try:
                     decoded = utils.decode(media.media)
@@ -221,11 +200,7 @@ class EditMessageMedia(BaseClient):
                             raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                     media = types.InputMediaDocument(
-                        id=types.InputDocument(
-                            id=unpacked[2],
-                            access_hash=unpacked[3],
-                            file_reference=b""
-                        )
+                        id=types.InputDocument(id=unpacked[2], access_hash=unpacked[3], file_reference=b"")
                     )
 
         if isinstance(media, InputMediaAnimation):
@@ -239,29 +214,22 @@ class EditMessageMedia(BaseClient):
                             file=self.save_file(media.media),
                             attributes=[
                                 types.DocumentAttributeVideo(
-                                    supports_streaming=True,
-                                    duration=media.duration,
-                                    w=media.width,
-                                    h=media.height
+                                    supports_streaming=True, duration=media.duration, w=media.width, h=media.height
                                 ),
                                 types.DocumentAttributeFilename(os.path.basename(media.media)),
-                                types.DocumentAttributeAnimated()
-                            ]
-                        )
+                                types.DocumentAttributeAnimated(),
+                            ],
+                        ),
                     )
                 )
 
                 media = types.InputMediaDocument(
                     id=types.InputDocument(
-                        id=media.document.id,
-                        access_hash=media.document.access_hash,
-                        file_reference=b""
+                        id=media.document.id, access_hash=media.document.access_hash, file_reference=b""
                     )
                 )
             elif media.media.startswith("http"):
-                media = types.InputMediaDocumentExternal(
-                    url=media.media
-                )
+                media = types.InputMediaDocumentExternal(url=media.media)
             else:
                 try:
                     decoded = utils.decode(media.media)
@@ -279,11 +247,7 @@ class EditMessageMedia(BaseClient):
                             raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                     media = types.InputMediaDocument(
-                        id=types.InputDocument(
-                            id=unpacked[2],
-                            access_hash=unpacked[3],
-                            file_reference=b""
-                        )
+                        id=types.InputDocument(id=unpacked[2], access_hash=unpacked[3], file_reference=b"")
                     )
 
         if isinstance(media, InputMediaDocument):
@@ -295,24 +259,18 @@ class EditMessageMedia(BaseClient):
                             mime_type="application/zip",
                             thumb=None if media.thumb is None else self.save_file(media.thumb),
                             file=self.save_file(media.media),
-                            attributes=[
-                                types.DocumentAttributeFilename(os.path.basename(media.media))
-                            ]
-                        )
+                            attributes=[types.DocumentAttributeFilename(os.path.basename(media.media))],
+                        ),
                     )
                 )
 
                 media = types.InputMediaDocument(
                     id=types.InputDocument(
-                        id=media.document.id,
-                        access_hash=media.document.access_hash,
-                        file_reference=b""
+                        id=media.document.id, access_hash=media.document.access_hash, file_reference=b""
                     )
                 )
             elif media.media.startswith("http"):
-                media = types.InputMediaDocumentExternal(
-                    url=media.media
-                )
+                media = types.InputMediaDocumentExternal(url=media.media)
             else:
                 try:
                     decoded = utils.decode(media.media)
@@ -330,11 +288,7 @@ class EditMessageMedia(BaseClient):
                             raise FileIdInvalid("Unknown media type: {}".format(unpacked[0]))
 
                     media = types.InputMediaDocument(
-                        id=types.InputDocument(
-                            id=unpacked[2],
-                            access_hash=unpacked[3],
-                            file_reference=b""
-                        )
+                        id=types.InputDocument(id=unpacked[2], access_hash=unpacked[3], file_reference=b"")
                     )
 
         r = self.send(
@@ -349,8 +303,4 @@ class EditMessageMedia(BaseClient):
 
         for i in r.updates:
             if isinstance(i, (types.UpdateEditMessage, types.UpdateEditChannelMessage)):
-                return pyrogram.Message._parse(
-                    self, i.message,
-                    {i.id: i for i in r.users},
-                    {i.id: i for i in r.chats}
-                )
+                return pyrogram.Message._parse(self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats})

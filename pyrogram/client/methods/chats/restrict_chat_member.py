@@ -23,14 +23,16 @@ from ...ext import BaseClient
 
 
 class RestrictChatMember(BaseClient):
-    def restrict_chat_member(self,
-                             chat_id: Union[int, str],
-                             user_id: Union[int, str],
-                             until_date: int = 0,
-                             can_send_messages: bool = False,
-                             can_send_media_messages: bool = False,
-                             can_send_other_messages: bool = False,
-                             can_add_web_page_previews: bool = False) -> bool:
+    def restrict_chat_member(
+        self,
+        chat_id: Union[int, str],
+        user_id: Union[int, str],
+        until_date: int = 0,
+        can_send_messages: bool = False,
+        can_send_media_messages: bool = False,
+        can_send_other_messages: bool = False,
+        can_add_web_page_previews: bool = False,
+    ) -> bool:
         """Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for
         this to work and must have the appropriate admin rights. Pass True for all boolean parameters to lift
         restrictions from a user.
@@ -106,8 +108,8 @@ class RestrictChatMember(BaseClient):
                     send_gifs=send_gifs,
                     send_games=send_games,
                     send_inline=send_inline,
-                    embed_links=embed_links
-                )
+                    embed_links=embed_links,
+                ),
             )
         )
 

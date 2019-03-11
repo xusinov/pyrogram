@@ -24,12 +24,14 @@ from pyrogram.client.ext import BaseClient
 
 
 class DownloadMedia(BaseClient):
-    def download_media(self,
-                       message: Union["pyrogram.Message", str],
-                       file_name: str = "",
-                       block: bool = True,
-                       progress: callable = None,
-                       progress_args: tuple = ()) -> Union[str, None]:
+    def download_media(
+        self,
+        message: Union["pyrogram.Message", str],
+        file_name: str = "",
+        block: bool = True,
+        progress: callable = None,
+        progress_args: tuple = (),
+    ) -> Union[str, None]:
         """Use this method to download the media from a Message.
 
         Args:
@@ -87,7 +89,7 @@ class DownloadMedia(BaseClient):
                     file_size=message.photo.sizes[-1].file_size,
                     mime_type="",
                     date=message.photo.date,
-                    client=self
+                    client=self,
                 )
             elif message.audio:
                 media = message.audio
@@ -105,7 +107,9 @@ class DownloadMedia(BaseClient):
                 media = message.animation
             else:
                 raise ValueError(error_message)
-        elif isinstance(message, (
+        elif isinstance(
+            message,
+            (
                 pyrogram.Photo,
                 pyrogram.PhotoSize,
                 pyrogram.Audio,
@@ -114,25 +118,21 @@ class DownloadMedia(BaseClient):
                 pyrogram.Voice,
                 pyrogram.VideoNote,
                 pyrogram.Sticker,
-                pyrogram.Animation
-        )):
+                pyrogram.Animation,
+            ),
+        ):
             if isinstance(message, pyrogram.Photo):
                 media = pyrogram.Document(
                     file_id=message.sizes[-1].file_id,
                     file_size=message.sizes[-1].file_size,
                     mime_type="",
                     date=message.date,
-                    client=self
+                    client=self,
                 )
             else:
                 media = message
         elif isinstance(message, str):
-            media = pyrogram.Document(
-                file_id=message,
-                file_size=0,
-                mime_type="",
-                client=self
-            )
+            media = pyrogram.Document(file_id=message, file_size=0, mime_type="", client=self)
         else:
             raise ValueError(error_message)
 

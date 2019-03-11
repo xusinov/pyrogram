@@ -23,8 +23,7 @@ from ...ext import BaseClient
 
 
 class UpdateUsername(BaseClient):
-    def update_username(self,
-                        username: Union[str, None]) -> bool:
+    def update_username(self, username: Union[str, None]) -> bool:
         """Use this method to update your own username.
         
         This method only works for users, not bots. Bot usernames must be changed via Bot Support or by recreating
@@ -42,10 +41,4 @@ class UpdateUsername(BaseClient):
             :class:`Error <pyrogram.Error>` in case of a Telegram RPC error.
         """
 
-        return bool(
-            self.send(
-                functions.account.UpdateUsername(
-                    username=username or ""
-                )
-            )
-        )
+        return bool(self.send(functions.account.UpdateUsername(username=username or "")))

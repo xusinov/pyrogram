@@ -23,9 +23,7 @@ from ...ext import BaseClient
 
 
 class IterDialogs(BaseClient):
-    def iter_dialogs(self,
-                     offset_date: int = 0,
-                     limit: int = 0) -> Generator["pyrogram.Dialog", None, None]:
+    def iter_dialogs(self, offset_date: int = 0, limit: int = 0) -> Generator["pyrogram.Dialog", None, None]:
         """Use this method to iterate through a user's dialogs sequentially.
 
         This convenience method does the same as repeatedly calling :meth:`get_dialogs` in a loop, thus saving you from
@@ -50,9 +48,7 @@ class IterDialogs(BaseClient):
         total = limit or (1 << 31) - 1
         limit = min(100, total)
 
-        pinned_dialogs = self.get_dialogs(
-            pinned_only=True
-        ).dialogs
+        pinned_dialogs = self.get_dialogs(pinned_only=True).dialogs
 
         for dialog in pinned_dialogs:
             yield dialog
@@ -63,10 +59,7 @@ class IterDialogs(BaseClient):
                 return
 
         while True:
-            dialogs = self.get_dialogs(
-                offset_date=offset_date,
-                limit=limit
-            ).dialogs
+            dialogs = self.get_dialogs(offset_date=offset_date, limit=limit).dialogs
 
             if not dialogs:
                 return

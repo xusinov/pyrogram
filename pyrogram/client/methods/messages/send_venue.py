@@ -24,20 +24,24 @@ from pyrogram.client.ext import BaseClient
 
 
 class SendVenue(BaseClient):
-    def send_venue(self,
-                   chat_id: Union[int, str],
-                   latitude: float,
-                   longitude: float,
-                   title: str,
-                   address: str,
-                   foursquare_id: str = "",
-                   foursquare_type: str = "",
-                   disable_notification: bool = None,
-                   reply_to_message_id: int = None,
-                   reply_markup: Union["pyrogram.InlineKeyboardMarkup",
-                                       "pyrogram.ReplyKeyboardMarkup",
-                                       "pyrogram.ReplyKeyboardRemove",
-                                       "pyrogram.ForceReply"] = None) -> "pyrogram.Message":
+    def send_venue(
+        self,
+        chat_id: Union[int, str],
+        latitude: float,
+        longitude: float,
+        title: str,
+        address: str,
+        foursquare_id: str = "",
+        foursquare_type: str = "",
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+        reply_markup: Union[
+            "pyrogram.InlineKeyboardMarkup",
+            "pyrogram.ReplyKeyboardMarkup",
+            "pyrogram.ReplyKeyboardRemove",
+            "pyrogram.ForceReply",
+        ] = None,
+    ) -> "pyrogram.Message":
         """Use this method to send information about a venue.
 
         Args:
@@ -86,28 +90,21 @@ class SendVenue(BaseClient):
             functions.messages.SendMedia(
                 peer=self.resolve_peer(chat_id),
                 media=types.InputMediaVenue(
-                    geo_point=types.InputGeoPoint(
-                        lat=latitude,
-                        long=longitude
-                    ),
+                    geo_point=types.InputGeoPoint(lat=latitude, long=longitude),
                     title=title,
                     address=address,
                     provider="",
                     venue_id=foursquare_id,
-                    venue_type=foursquare_type
+                    venue_type=foursquare_type,
                 ),
                 message="",
                 silent=disable_notification or None,
                 reply_to_msg_id=reply_to_message_id,
                 random_id=self.rnd_id(),
-                reply_markup=reply_markup.write() if reply_markup else None
+                reply_markup=reply_markup.write() if reply_markup else None,
             )
         )
 
         for i in r.updates:
             if isinstance(i, (types.UpdateNewMessage, types.UpdateNewChannelMessage)):
-                return pyrogram.Message._parse(
-                    self, i.message,
-                    {i.id: i for i in r.users},
-                    {i.id: i for i in r.chats}
-                )
+                return pyrogram.Message._parse(self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats})

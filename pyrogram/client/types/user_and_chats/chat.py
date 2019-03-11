@@ -77,24 +77,26 @@ class Chat(PyrogramType):
             The reason why this chat might be unavailable to some users.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 id: int,
-                 type: str,
-                 title: str = None,
-                 username: str = None,
-                 first_name: str = None,
-                 last_name: str = None,
-                 all_members_are_administrators: bool = None,
-                 photo: ChatPhoto = None,
-                 description: str = None,
-                 invite_link: str = None,
-                 pinned_message=None,
-                 sticker_set_name: str = None,
-                 can_set_sticker_set: bool = None,
-                 members_count: int = None,
-                 restriction_reason: str = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        id: int,
+        type: str,
+        title: str = None,
+        username: str = None,
+        first_name: str = None,
+        last_name: str = None,
+        all_members_are_administrators: bool = None,
+        photo: ChatPhoto = None,
+        description: str = None,
+        invite_link: str = None,
+        pinned_message=None,
+        sticker_set_name: str = None,
+        can_set_sticker_set: bool = None,
+        members_count: int = None,
+        restriction_reason: str = None
+    ):
         super().__init__(client)
 
         self.id = id
@@ -123,7 +125,7 @@ class Chat(PyrogramType):
             last_name=user.last_name,
             photo=ChatPhoto._parse(client, user.photo),
             restriction_reason=user.restriction_reason,
-            client=client
+            client=client,
         )
 
     @staticmethod
@@ -139,7 +141,7 @@ class Chat(PyrogramType):
             title=chat.title,
             all_members_are_administrators=admins_enabled,
             photo=ChatPhoto._parse(client, getattr(chat, "photo", None)),
-            client=client
+            client=client,
         )
 
     @staticmethod
@@ -151,7 +153,7 @@ class Chat(PyrogramType):
             username=getattr(channel, "username", None),
             photo=ChatPhoto._parse(client, getattr(channel, "photo", None)),
             restriction_reason=getattr(channel, "restriction_reason", None),
-            client=client
+            client=client,
         )
 
     @staticmethod
@@ -200,10 +202,7 @@ class Chat(PyrogramType):
                 parsed_chat.sticker_set_name = full_chat.stickerset
 
             if full_chat.pinned_msg_id:
-                parsed_chat.pinned_message = client.get_messages(
-                    parsed_chat.id,
-                    message_ids=full_chat.pinned_msg_id
-                )
+                parsed_chat.pinned_message = client.get_messages(parsed_chat.id, message_ids=full_chat.pinned_msg_id)
 
             if isinstance(full_chat.exported_invite, types.ChatInviteExported):
                 parsed_chat.invite_link = full_chat.exported_invite.link

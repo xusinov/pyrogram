@@ -23,8 +23,4 @@ class Handler:
         self.filters = filters
 
     def check(self, update):
-        return (
-            self.filters(update)
-            if callable(self.filters)
-            else True
-        )
+        return self.filters(update) if callable(self.filters) else True

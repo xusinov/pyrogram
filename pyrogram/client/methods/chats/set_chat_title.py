@@ -23,9 +23,7 @@ from ...ext import BaseClient
 
 
 class SetChatTitle(BaseClient):
-    def set_chat_title(self,
-                       chat_id: Union[int, str],
-                       title: str) -> bool:
+    def set_chat_title(self, chat_id: Union[int, str], title: str) -> bool:
         """Use this method to change the title of a chat.
         Titles can't be changed for private chats.
         You must be an administrator in the chat for this to work and must have the appropriate admin rights.
@@ -51,20 +49,10 @@ class SetChatTitle(BaseClient):
         peer = self.resolve_peer(chat_id)
 
         if isinstance(peer, types.InputPeerChat):
-            self.send(
-                functions.messages.EditChatTitle(
-                    chat_id=peer.chat_id,
-                    title=title
-                )
-            )
+            self.send(functions.messages.EditChatTitle(chat_id=peer.chat_id, title=title))
         elif isinstance(peer, types.InputPeerChannel):
-            self.send(
-                functions.channels.EditTitle(
-                    channel=peer,
-                    title=title
-                )
-            )
+            self.send(functions.channels.EditTitle(channel=peer, title=title))
         else:
-            raise ValueError("The chat_id \"{}\" belongs to a user".format(chat_id))
+            raise ValueError('The chat_id "{}" belongs to a user'.format(chat_id))
 
         return True

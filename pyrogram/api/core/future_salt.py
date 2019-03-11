@@ -24,7 +24,7 @@ from .primitives import Int, Long
 
 
 class FutureSalt(Object):
-    ID = 0x0949d9dc
+    ID = 0x0949D9DC
 
     def __init__(self, valid_since: int or datetime, valid_until: int or datetime, salt: int):
         self.valid_since = valid_since

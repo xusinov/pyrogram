@@ -30,9 +30,4 @@ class MsgFactory:
         self.seq_no = SeqNo()
 
     def __call__(self, body: Object) -> Message:
-        return Message(
-            body,
-            MsgId(),
-            self.seq_no(type(body) not in not_content_related),
-            len(body)
-        )
+        return Message(body, MsgId(), self.seq_no(type(body) not in not_content_related), len(body))

@@ -23,13 +23,15 @@ from pyrogram.client.ext import BaseClient
 
 
 class SendInlineBotResult(BaseClient):
-    def send_inline_bot_result(self,
-                               chat_id: Union[int, str],
-                               query_id: int,
-                               result_id: str,
-                               disable_notification: bool = None,
-                               reply_to_message_id: int = None,
-                               hide_via: bool = None):
+    def send_inline_bot_result(
+        self,
+        chat_id: Union[int, str],
+        query_id: int,
+        result_id: str,
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+        hide_via: bool = None,
+    ):
         """Use this method to send an inline bot result.
         Bot results can be retrieved using :obj:`get_inline_bot_results <pyrogram.Client.get_inline_bot_results>`
 
@@ -69,6 +71,6 @@ class SendInlineBotResult(BaseClient):
                 random_id=self.rnd_id(),
                 silent=disable_notification or None,
                 reply_to_msg_id=reply_to_message_id,
-                hide_via=hide_via or None
+                hide_via=hide_via or None,
             )
         )

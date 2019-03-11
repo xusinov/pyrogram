@@ -44,12 +44,7 @@ class Auth:
 
     @staticmethod
     def pack(data: Object) -> bytes:
-        return (
-            bytes(8)
-            + Long(MsgId())
-            + Int(len(data.write()))
-            + data.write()
-        )
+        return bytes(8) + Long(MsgId()) + Int(len(data.write())) + data.write()
 
     @staticmethod
     def unpack(b: BytesIO):
@@ -110,16 +105,11 @@ class Auth:
                 new_nonce = int.from_bytes(urandom(32), "little", signed=True)
 
                 data = types.PQInnerData(
-                    res_pq.pq,
-                    p.to_bytes(4, "big"),
-                    q.to_bytes(4, "big"),
-                    nonce,
-                    server_nonce,
-                    new_nonce,
+                    res_pq.pq, p.to_bytes(4, "big"), q.to_bytes(4, "big"), nonce, server_nonce, new_nonce
                 ).write()
 
                 sha = sha1(data).digest()
-                padding = urandom(- (len(data) + len(sha)) % 255)
+                padding = urandom(-(len(data) + len(sha)) % 255)
                 data_with_hash = sha + data + padding
                 encrypted_data = RSA.encrypt(data_with_hash, public_key_fingerprint)
 
@@ -134,7 +124,7 @@ class Auth:
                         p.to_bytes(4, "big"),
                         q.to_bytes(4, "big"),
                         public_key_fingerprint,
-                        encrypted_data
+                        encrypted_data,
                     )
                 )
 
@@ -143,14 +133,10 @@ class Auth:
                 server_nonce = server_nonce.to_bytes(16, "little", signed=True)
                 new_nonce = new_nonce.to_bytes(32, "little", signed=True)
 
-                tmp_aes_key = (
-                    sha1(new_nonce + server_nonce).digest()
-                    + sha1(server_nonce + new_nonce).digest()[:12]
-                )
+                tmp_aes_key = sha1(new_nonce + server_nonce).digest() + sha1(server_nonce + new_nonce).digest()[:12]
 
                 tmp_aes_iv = (
-                    sha1(server_nonce + new_nonce).digest()[12:]
-                    + sha1(new_nonce + new_nonce).digest() + new_nonce[:4]
+                    sha1(server_nonce + new_nonce).digest()[12:] + sha1(new_nonce + new_nonce).digest() + new_nonce[:4]
                 )
 
                 server_nonce = int.from_bytes(server_nonce, "little", signed=True)
@@ -174,25 +160,16 @@ class Auth:
 
                 retry_id = 0
 
-                data = types.ClientDHInnerData(
-                    nonce,
-                    server_nonce,
-                    retry_id,
-                    g_b
-                ).write()
+                data = types.ClientDHInnerData(nonce, server_nonce, retry_id, g_b).write()
 
                 sha = sha1(data).digest()
-                padding = urandom(- (len(data) + len(sha)) % 16)
+                padding = urandom(-(len(data) + len(sha)) % 16)
                 data_with_hash = sha + data + padding
                 encrypted_data = AES.ige256_encrypt(data_with_hash, tmp_aes_key, tmp_aes_iv)
 
                 log.debug("Send set_client_DH_params")
                 set_client_dh_params_answer = self.send(
-                    functions.SetClientDHParams(
-                        nonce,
-                        server_nonce,
-                        encrypted_data
-                    )
+                    functions.SetClientDHParams(nonce, server_nonce, encrypted_data)
                 )
 
                 # TODO: Handle "auth_key_aux_hash" if the previous step fails
@@ -243,11 +220,7 @@ class Auth:
 
                 log.debug("Server salt: {}".format(int.from_bytes(server_salt, "little")))
 
-                log.info(
-                    "Done auth key exchange: {}".format(
-                        set_client_dh_params_answer.__class__.__name__
-                    )
-                )
+                log.info("Done auth key exchange: {}".format(set_client_dh_params_answer.__class__.__name__))
             except Exception as e:
                 if retries_left:
                     retries_left -= 1

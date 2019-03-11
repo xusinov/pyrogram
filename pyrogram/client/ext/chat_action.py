@@ -72,6 +72,6 @@ class ChatAction(Enum):
             if a.name.lower() == action.lower():
                 return a
 
-        raise ValueError("Invalid ChatAction: '{}'. Possible types are {}".format(
-            action, [x.name.lower() for x in ChatAction]
-        ))
+        raise ValueError(
+            "Invalid ChatAction: '{}'. Possible types are {}".format(action, [x.name.lower() for x in ChatAction])
+        )

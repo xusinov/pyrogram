@@ -22,7 +22,7 @@ from ..object import Object
 
 
 class Null(Object):
-    ID = 0x56730bcc
+    ID = 0x56730BCC
 
     @staticmethod
     def read(b: BytesIO, *args) -> None:

@@ -24,10 +24,9 @@ from ...ext import BaseClient
 
 
 class KickChatMember(BaseClient):
-    def kick_chat_member(self,
-                         chat_id: Union[int, str],
-                         user_id: Union[int, str],
-                         until_date: int = 0) -> Union["pyrogram.Message", bool]:
+    def kick_chat_member(
+        self, chat_id: Union[int, str], user_id: Union[int, str], until_date: int = 0
+    ) -> Union["pyrogram.Message", bool]:
         """Use this method to kick a user from a group, a supergroup or a channel.
         In the case of supergroups and channels, the user will not be able to return to the group on their own using
         invite links, etc., unless unbanned first. You must be an administrator in the chat for this to work and must
@@ -74,24 +73,15 @@ class KickChatMember(BaseClient):
                         send_gifs=True,
                         send_games=True,
                         send_inline=True,
-                        embed_links=True
-                    )
+                        embed_links=True,
+                    ),
                 )
             )
         else:
-            r = self.send(
-                functions.messages.DeleteChatUser(
-                    chat_id=abs(chat_id),
-                    user_id=user_peer
-                )
-            )
+            r = self.send(functions.messages.DeleteChatUser(chat_id=abs(chat_id), user_id=user_peer))
 
         for i in r.updates:
             if isinstance(i, (types.UpdateNewMessage, types.UpdateNewChannelMessage)):
-                return pyrogram.Message._parse(
-                    self, i.message,
-                    {i.id: i for i in r.users},
-                    {i.id: i for i in r.chats}
-                )
+                return pyrogram.Message._parse(self, i.message, {i.id: i for i in r.users}, {i.id: i for i in r.chats})
         else:
             return True

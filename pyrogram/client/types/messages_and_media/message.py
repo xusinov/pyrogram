@@ -234,65 +234,69 @@ class Message(PyrogramType, Update):
 
     # TODO: Add game missing field. Also invoice, successful_payment, connected_website
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 message_id: int,
-                 date: int = None,
-                 chat: Chat = None,
-                 from_user: User = None,
-                 forward_from: User = None,
-                 forward_from_chat: Chat = None,
-                 forward_from_message_id: int = None,
-                 forward_signature: str = None,
-                 forward_date: int = None,
-                 reply_to_message: "Message" = None,
-                 mentioned: bool = None,
-                 empty: bool = None,
-                 service: bool = None,
-                 media: bool = None,
-                 edit_date: int = None,
-                 media_group_id: str = None,
-                 author_signature: str = None,
-                 text: str = None,
-                 entities: List["pyrogram.MessageEntity"] = None,
-                 caption_entities: List["pyrogram.MessageEntity"] = None,
-                 audio: "pyrogram.Audio" = None,
-                 document: "pyrogram.Document" = None,
-                 photo: "pyrogram.Photo" = None,
-                 sticker: "pyrogram.Sticker" = None,
-                 animation: "pyrogram.Animation" = None,
-                 game: "pyrogram.Game" = None,
-                 video: "pyrogram.Video" = None,
-                 voice: "pyrogram.Voice" = None,
-                 video_note: "pyrogram.VideoNote" = None,
-                 caption: str = None,
-                 contact: "pyrogram.Contact" = None,
-                 location: "pyrogram.Location" = None,
-                 venue: "pyrogram.Venue" = None,
-                 web_page: bool = None,
-                 poll: "pyrogram.Poll" = None,
-                 new_chat_members: List[User] = None,
-                 left_chat_member: User = None,
-                 new_chat_title: str = None,
-                 new_chat_photo: "pyrogram.Photo" = None,
-                 delete_chat_photo: bool = None,
-                 group_chat_created: bool = None,
-                 supergroup_chat_created: bool = None,
-                 channel_chat_created: bool = None,
-                 migrate_to_chat_id: int = None,
-                 migrate_from_chat_id: int = None,
-                 pinned_message: "Message" = None,
-                 game_high_score: int = None,
-                 views: int = None,
-                 via_bot: User = None,
-                 outgoing: bool = None,
-                 matches: List[Match] = None,
-                 command: List[str] = None,
-                 reply_markup: Union["pyrogram.InlineKeyboardMarkup",
-                                     "pyrogram.ReplyKeyboardMarkup",
-                                     "pyrogram.ReplyKeyboardRemove",
-                                     "pyrogram.ForceReply"] = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        message_id: int,
+        date: int = None,
+        chat: Chat = None,
+        from_user: User = None,
+        forward_from: User = None,
+        forward_from_chat: Chat = None,
+        forward_from_message_id: int = None,
+        forward_signature: str = None,
+        forward_date: int = None,
+        reply_to_message: "Message" = None,
+        mentioned: bool = None,
+        empty: bool = None,
+        service: bool = None,
+        media: bool = None,
+        edit_date: int = None,
+        media_group_id: str = None,
+        author_signature: str = None,
+        text: str = None,
+        entities: List["pyrogram.MessageEntity"] = None,
+        caption_entities: List["pyrogram.MessageEntity"] = None,
+        audio: "pyrogram.Audio" = None,
+        document: "pyrogram.Document" = None,
+        photo: "pyrogram.Photo" = None,
+        sticker: "pyrogram.Sticker" = None,
+        animation: "pyrogram.Animation" = None,
+        game: "pyrogram.Game" = None,
+        video: "pyrogram.Video" = None,
+        voice: "pyrogram.Voice" = None,
+        video_note: "pyrogram.VideoNote" = None,
+        caption: str = None,
+        contact: "pyrogram.Contact" = None,
+        location: "pyrogram.Location" = None,
+        venue: "pyrogram.Venue" = None,
+        web_page: bool = None,
+        poll: "pyrogram.Poll" = None,
+        new_chat_members: List[User] = None,
+        left_chat_member: User = None,
+        new_chat_title: str = None,
+        new_chat_photo: "pyrogram.Photo" = None,
+        delete_chat_photo: bool = None,
+        group_chat_created: bool = None,
+        supergroup_chat_created: bool = None,
+        channel_chat_created: bool = None,
+        migrate_to_chat_id: int = None,
+        migrate_from_chat_id: int = None,
+        pinned_message: "Message" = None,
+        game_high_score: int = None,
+        views: int = None,
+        via_bot: User = None,
+        outgoing: bool = None,
+        matches: List[Match] = None,
+        command: List[str] = None,
+        reply_markup: Union[
+            "pyrogram.InlineKeyboardMarkup",
+            "pyrogram.ReplyKeyboardMarkup",
+            "pyrogram.ReplyKeyboardRemove",
+            "pyrogram.ForceReply",
+        ] = None
+    ):
         super().__init__(client)
 
         self.message_id = message_id
@@ -350,8 +354,13 @@ class Message(PyrogramType, Update):
         self.reply_markup = reply_markup
 
     @staticmethod
-    def _parse(client, message: types.Message or types.MessageService or types.MessageEmpty, users: dict, chats: dict,
-               replies: int = 1):
+    def _parse(
+        client,
+        message: types.Message or types.MessageService or types.MessageEmpty,
+        users: dict,
+        chats: dict,
+        replies: int = 1,
+    ):
         if isinstance(message, types.MessageEmpty):
             return Message(message_id=message.id, empty=True, client=client)
 
@@ -411,9 +420,7 @@ class Message(PyrogramType, Update):
             if isinstance(action, types.MessageActionPinMessage):
                 try:
                     parsed_message.pinned_message = client.get_messages(
-                        parsed_message.chat.id,
-                        reply_to_message_ids=message.id,
-                        replies=0
+                        parsed_message.chat.id, reply_to_message_ids=message.id, replies=0
                     )
                 except MessageIdsEmpty:
                     pass
@@ -424,9 +431,7 @@ class Message(PyrogramType, Update):
                 if message.reply_to_msg_id and replies:
                     try:
                         parsed_message.reply_to_message = client.get_messages(
-                            parsed_message.chat.id,
-                            reply_to_message_ids=message.id,
-                            replies=0
+                            parsed_message.chat.id, reply_to_message_ids=message.id, replies=0
                         )
                     except MessageIdsEmpty:
                         pass
@@ -489,11 +494,7 @@ class Message(PyrogramType, Update):
                     if isinstance(doc, types.Document):
                         attributes = {type(i): i for i in doc.attributes}
 
-                        file_name = getattr(
-                            attributes.get(
-                                types.DocumentAttributeFilename, None
-                            ), "file_name", None
-                        )
+                        file_name = getattr(attributes.get(types.DocumentAttributeFilename, None), "file_name", None)
 
                         if types.DocumentAttributeAudio in attributes:
                             audio_attributes = attributes[types.DocumentAttributeAudio]
@@ -515,10 +516,11 @@ class Message(PyrogramType, Update):
                                 video = pyrogram.Video._parse(client, doc, video_attributes, file_name)
                         elif types.DocumentAttributeSticker in attributes:
                             sticker = pyrogram.Sticker._parse(
-                                client, doc,
+                                client,
+                                doc,
                                 attributes.get(types.DocumentAttributeImageSize, None),
                                 attributes[types.DocumentAttributeSticker],
-                                file_name
+                                file_name,
                             )
                         else:
                             document = pyrogram.Document._parse(client, doc, file_name)
@@ -581,29 +583,29 @@ class Message(PyrogramType, Update):
                 via_bot=User._parse(client, users.get(message.via_bot_id, None)),
                 outgoing=message.out,
                 reply_markup=reply_markup,
-                client=client
+                client=client,
             )
 
             if message.reply_to_msg_id and replies:
                 try:
                     parsed_message.reply_to_message = client.get_messages(
-                        parsed_message.chat.id,
-                        reply_to_message_ids=message.id,
-                        replies=replies - 1
+                        parsed_message.chat.id, reply_to_message_ids=message.id, replies=replies - 1
                     )
                 except MessageIdsEmpty:
                     pass
 
             return parsed_message
 
-    def reply(self,
-              text: str,
-              quote: bool = None,
-              parse_mode: str = "",
-              disable_web_page_preview: bool = None,
-              disable_notification: bool = None,
-              reply_to_message_id: int = None,
-              reply_markup=None):
+    def reply(
+        self,
+        text: str,
+        quote: bool = None,
+        parse_mode: str = "",
+        disable_web_page_preview: bool = None,
+        disable_notification: bool = None,
+        reply_to_message_id: int = None,
+        reply_markup=None,
+    ):
         """Bound method *reply* of :obj:`Message <pyrogram.Message>`.
 
         Use as a shortcut for:
@@ -668,7 +670,7 @@ class Message(PyrogramType, Update):
             disable_web_page_preview=disable_web_page_preview,
             disable_notification=disable_notification,
             reply_to_message_id=reply_to_message_id,
-            reply_markup=reply_markup
+            reply_markup=reply_markup,
         )
 
     def edit(self, text: str, parse_mode: str = "", disable_web_page_preview: bool = None, reply_markup=None):
@@ -716,12 +718,10 @@ class Message(PyrogramType, Update):
             text=text,
             parse_mode=parse_mode,
             disable_web_page_preview=disable_web_page_preview,
-            reply_markup=reply_markup
+            reply_markup=reply_markup,
         )
 
-    def forward(self,
-                chat_id: int or str,
-                disable_notification: bool = None):
+    def forward(self, chat_id: int or str, disable_notification: bool = None):
         """Bound method *forward* of :obj:`Message <pyrogram.Message>`.
 
         Use as a shortcut for:
@@ -759,7 +759,7 @@ class Message(PyrogramType, Update):
             chat_id=chat_id,
             from_chat_id=self.chat.id,
             message_ids=self.message_id,
-            disable_notification=disable_notification
+            disable_notification=disable_notification,
         )
 
     def delete(self, revoke: bool = True):
@@ -792,11 +792,7 @@ class Message(PyrogramType, Update):
         Raises:
             :class:`Error <pyrogram.Error>`
         """
-        self._client.delete_messages(
-            chat_id=self.chat.id,
-            message_ids=self.message_id,
-            revoke=revoke
-        )
+        self._client.delete_messages(chat_id=self.chat.id, message_ids=self.message_id, revoke=revoke)
 
         return True
 
@@ -864,11 +860,7 @@ class Message(PyrogramType, Update):
         elif isinstance(self.reply_markup, pyrogram.InlineKeyboardMarkup):
             if isinstance(x, int) and y is None:
                 try:
-                    button = [
-                        button
-                        for row in self.reply_markup.inline_keyboard
-                        for button in row
-                    ][x]
+                    button = [button for row in self.reply_markup.inline_keyboard for button in row][x]
                 except IndexError:
                     raise ValueError("The button at index {} doesn't exist".format(x)) from None
             elif isinstance(x, int) and isinstance(y, int):
@@ -881,25 +873,18 @@ class Message(PyrogramType, Update):
 
                 try:
                     button = [
-                        button
-                        for row in self.reply_markup.inline_keyboard
-                        for button in row
-                        if x == button.text
+                        button for row in self.reply_markup.inline_keyboard for button in row if x == button.text
                     ][0]
                 except IndexError:
                     raise ValueError(
-                        "The button with label '{}' doesn't exists".format(
-                            x.encode("unicode_escape").decode()
-                        )
+                        "The button with label '{}' doesn't exists".format(x.encode("unicode_escape").decode())
                     ) from None
             else:
                 raise ValueError("Invalid arguments")
 
             if button.callback_data:
                 return self._client.request_callback_answer(
-                    chat_id=self.chat.id,
-                    message_id=self.message_id,
-                    callback_data=button.callback_data
+                    chat_id=self.chat.id, message_id=self.message_id, callback_data=button.callback_data
                 )
             elif button.url:
                 return button.url
@@ -954,11 +939,7 @@ class Message(PyrogramType, Update):
             ``ValueError``: If the message doesn't contain any downloadable media
         """
         return self._client.download_media(
-            message=self,
-            file_name=file_name,
-            block=block,
-            progress=progress,
-            progress_args=progress_args,
+            message=self, file_name=file_name, block=block, progress=progress, progress_args=progress_args
         )
 
 

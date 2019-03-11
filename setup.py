@@ -101,10 +101,7 @@ class Clean(Command):
 class Generate(Command):
     description = "Generate Pyrogram files"
 
-    user_options = [
-        ("api", None, "Generate API files"),
-        ("docs", None, "Generate docs files")
-    ]
+    user_options = [("api", None, "Generate API files"), ("docs", None, "Generate docs files")]
 
     def __init__(self, dist, **kw):
         super().__init__(dist, **kw)
@@ -160,7 +157,7 @@ setup(
         "Topic :: Communications :: Chat",
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Libraries :: Python Modules",
-        "Topic :: Software Development :: Libraries :: Application Frameworks"
+        "Topic :: Software Development :: Libraries :: Application Frameworks",
     ],
     keywords="telegram chat messenger mtproto api client library python",
     project_urls={
@@ -173,12 +170,6 @@ setup(
     packages=find_packages(exclude=["compiler*"]),
     zip_safe=False,
     install_requires=read("requirements.txt"),
-    extras_require={
-        "tgcrypto": ["tgcrypto==1.1.1"],  # TODO: Remove soon
-        "fast": ["tgcrypto==1.1.1"],
-    },
-    cmdclass={
-        "clean": Clean,
-        "generate": Generate
-    }
+    extras_require={"tgcrypto": ["tgcrypto==1.1.1"], "fast": ["tgcrypto==1.1.1"]},  # TODO: Remove soon
+    cmdclass={"clean": Clean, "generate": Generate},
 )

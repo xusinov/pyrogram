@@ -35,11 +35,9 @@ class GameHighScores(PyrogramType):
             Game scores.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 total_count: int,
-                 game_high_scores: List[GameHighScore]):
+    def __init__(
+        self, *, client: "pyrogram.client.ext.BaseClient", total_count: int, game_high_scores: List[GameHighScore]
+    ):
         super().__init__(client)
 
         self.total_count = total_count
@@ -50,7 +48,7 @@ class GameHighScores(PyrogramType):
         return GameHighScores(
             total_count=len(game_high_scores.scores),
             game_high_scores=[
-                GameHighScore._parse(client, score, game_high_scores.users)
-                for score in game_high_scores.scores],
-            client=client
+                GameHighScore._parse(client, score, game_high_scores.users) for score in game_high_scores.scores
+            ],
+            client=client,
         )

@@ -222,10 +222,7 @@ class Filters:
     - poll"""
 
     @staticmethod
-    def command(command: str or list,
-                prefix: str or list = "/",
-                separator: str = " ",
-                case_sensitive: bool = False):
+    def command(command: str or list, prefix: str or list = "/", separator: str = " ", case_sensitive: bool = False):
         """Filter commands, i.e.: text messages starting with "/" or any other custom prefix.
 
         Args:
@@ -254,7 +251,7 @@ class Filters:
                 for i in _.p:
                     if m.text.startswith(i):
                         t = m.text.split(_.s)
-                        c, a = t[0][len(i):], t[1:]
+                        c, a = t[0][len(i) :], t[1:]
                         c = c if _.cs else c.lower()
                         m.command = ([c] + a) if c in _.c else None
                         break
@@ -264,15 +261,12 @@ class Filters:
         return create(
             "Command",
             f,
-            c={command if case_sensitive
-               else command.lower()}
+            c={command if case_sensitive else command.lower()}
             if not isinstance(command, list)
-            else {c if case_sensitive
-                  else c.lower()
-                  for c in command},
+            else {c if case_sensitive else c.lower() for c in command},
             p=set(prefix) if prefix else {""},
             s=separator,
-            cs=case_sensitive
+            cs=case_sensitive,
         )
 
     @staticmethod
@@ -313,18 +307,18 @@ class Filters:
             users = [] if users is None else users if type(users) is list else [users]
             super().__init__(
                 {"me" if i in ["me", "self"] else i.lower().strip("@") if type(i) is str else i for i in users}
-                if type(users) is list else
-                {"me" if users in ["me", "self"] else users.lower().strip("@") if type(users) is str else users}
+                if type(users) is list
+                else {"me" if users in ["me", "self"] else users.lower().strip("@") if type(users) is str else users}
             )
 
         def __call__(self, message):
             return bool(
                 message.from_user
-                and (message.from_user.id in self
-                     or (message.from_user.username
-                         and message.from_user.username.lower() in self)
-                     or ("me" in self
-                         and message.from_user.is_self))
+                and (
+                    message.from_user.id in self
+                    or (message.from_user.username and message.from_user.username.lower() in self)
+                    or ("me" in self and message.from_user.is_self)
+                )
             )
 
     # noinspection PyPep8Naming
@@ -345,19 +339,18 @@ class Filters:
             chats = [] if chats is None else chats if type(chats) is list else [chats]
             super().__init__(
                 {"me" if i in ["me", "self"] else i.lower().strip("@") if type(i) is str else i for i in chats}
-                if type(chats) is list else
-                {"me" if chats in ["me", "self"] else chats.lower().strip("@") if type(chats) is str else chats}
+                if type(chats) is list
+                else {"me" if chats in ["me", "self"] else chats.lower().strip("@") if type(chats) is str else chats}
             )
 
         def __call__(self, message):
             return bool(
                 message.chat
-                and (message.chat.id in self
-                     or (message.chat.username
-                         and message.chat.username.lower() in self)
-                     or ("me" in self and message.from_user
-                         and message.from_user.is_self
-                         and not message.outgoing))
+                and (
+                    message.chat.id in self
+                    or (message.chat.username and message.chat.username.lower() in self)
+                    or ("me" in self and message.from_user and message.from_user.is_self and not message.outgoing)
+                )
             )
 
     dan = create("Dan", lambda _, m: bool(m.from_user and m.from_user.id == 23122162))

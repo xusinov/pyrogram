@@ -31,11 +31,4 @@ class GetMe(BaseClient):
         Raises:
             :class:`Error <pyrogram.Error>` in case of a Telegram RPC error.
         """
-        return pyrogram.User._parse(
-            self,
-            self.send(
-                functions.users.GetFullUser(
-                    types.InputPeerSelf()
-                )
-            ).user
-        )
+        return pyrogram.User._parse(self, self.send(functions.users.GetFullUser(types.InputPeerSelf())).user)

@@ -24,10 +24,7 @@ from ...ext import BaseClient
 
 
 class ChangeCloudPassword(BaseClient):
-    def change_cloud_password(self,
-                              current_password: str,
-                              new_password: str,
-                              new_hint: str = "") -> bool:
+    def change_cloud_password(self, current_password: str, new_password: str, new_hint: str = "") -> bool:
         """Use this method to change your Two-Step Verification password (Cloud Password) with a new one.
 
         Args:
@@ -60,10 +57,8 @@ class ChangeCloudPassword(BaseClient):
             functions.account.UpdatePasswordSettings(
                 password=compute_check(r, current_password),
                 new_settings=types.account.PasswordInputSettings(
-                    new_algo=r.new_algo,
-                    new_password_hash=new_hash,
-                    hint=new_hint
-                )
+                    new_algo=r.new_algo, new_password_hash=new_hash, hint=new_hint
+                ),
             )
         )
 

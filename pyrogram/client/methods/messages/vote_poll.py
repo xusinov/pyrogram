@@ -23,10 +23,7 @@ from pyrogram.client.ext import BaseClient
 
 
 class VotePoll(BaseClient):
-    def vote_poll(self,
-                  chat_id: Union[int, str],
-                  message_id: id,
-                  option: int) -> bool:
+    def vote_poll(self, chat_id: Union[int, str], message_id: id, option: int) -> bool:
         """Use this method to vote a poll.
 
         Args:
@@ -51,9 +48,7 @@ class VotePoll(BaseClient):
 
         self.send(
             functions.messages.SendVote(
-                peer=self.resolve_peer(chat_id),
-                msg_id=message_id,
-                options=[poll.options[option].data]
+                peer=self.resolve_peer(chat_id), msg_id=message_id, options=[poll.options[option].data]
             )
         )
 

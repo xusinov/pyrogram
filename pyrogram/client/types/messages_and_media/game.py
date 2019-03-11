@@ -48,15 +48,17 @@ class Game(PyrogramType):
             Upload via BotFather.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 id: int,
-                 title: str,
-                 short_name: str,
-                 description: str,
-                 photo: Photo,
-                 animation: Animation = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        id: int,
+        title: str,
+        short_name: str,
+        description: str,
+        photo: Photo,
+        animation: Animation = None
+    ):
         super().__init__(client)
 
         self.id = id
@@ -74,17 +76,10 @@ class Game(PyrogramType):
         if game.document:
             attributes = {type(i): i for i in game.document.attributes}
 
-            file_name = getattr(
-                attributes.get(
-                    types.DocumentAttributeFilename, None
-                ), "file_name", None
-            )
+            file_name = getattr(attributes.get(types.DocumentAttributeFilename, None), "file_name", None)
 
             animation = Animation._parse(
-                client,
-                game.document,
-                attributes.get(types.DocumentAttributeVideo, None),
-                file_name
+                client, game.document, attributes.get(types.DocumentAttributeVideo, None), file_name
             )
 
         return Game(
@@ -94,5 +89,5 @@ class Game(PyrogramType):
             description=game.description,
             photo=Photo._parse(client, game.photo),
             animation=animation,
-            client=client
+            client=client,
         )

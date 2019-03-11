@@ -68,8 +68,7 @@ def get_docstring_arg_type(t: str, is_list: bool = False, is_pyrogram_type: bool
 
         t = (("e" if is_list else "E") + "ither " if n else "") + ", ".join(
             ":obj:`{1} <{0}.{1}>`".format(
-                "pyrogram.types" if is_pyrogram_type else "pyrogram.api.types",
-                i.replace("pyrogram.", "")
+                "pyrogram.types" if is_pyrogram_type else "pyrogram.api.types", i.replace("pyrogram.", "")
             )
             for i in t
         )
@@ -87,10 +86,7 @@ def get_references(t: str):
     if t:
         n = len(t) - 1
 
-        t = ", ".join(
-            ":obj:`{0} <pyrogram.api.functions.{0}>`".format(i)
-            for i in t
-        )
+        t = ", ".join(":obj:`{0} <pyrogram.api.functions.{0}>`".format(i) for i in t)
 
         if n:
             t = t.split(", ")
@@ -126,15 +122,9 @@ def get_argument_type(arg):
 
 
 class Combinator:
-    def __init__(self,
-                 section: str,
-                 namespace: str,
-                 name: str,
-                 id: str,
-                 args: list,
-                 has_flags: bool,
-                 return_type: str,
-                 docs: str):
+    def __init__(
+        self, section: str, namespace: str, name: str, id: str, args: list, has_flags: bool, return_type: str, docs: str
+    ):
         self.section = section
         self.namespace = namespace
         self.name = name
@@ -170,9 +160,9 @@ def start():
     shutil.rmtree("{}/types".format(DESTINATION), ignore_errors=True)
     shutil.rmtree("{}/functions".format(DESTINATION), ignore_errors=True)
 
-    with open("{}/source/auth_key.tl".format(HOME), encoding="utf-8") as auth, \
-            open("{}/source/sys_msgs.tl".format(HOME), encoding="utf-8") as system, \
-            open("{}/source/main_api.tl".format(HOME), encoding="utf-8") as api:
+    with open("{}/source/auth_key.tl".format(HOME), encoding="utf-8") as auth, open(
+        "{}/source/sys_msgs.tl".format(HOME), encoding="utf-8"
+    ) as system, open("{}/source/main_api.tl".format(HOME), encoding="utf-8") as api:
         schema = (auth.read() + system.read() + api.read()).splitlines()
 
     with open("{}/template/mtproto.txt".format(HOME), encoding="utf-8") as f:
@@ -236,11 +226,8 @@ def start():
                     "0x{}".format(id.zfill(8)),
                     args,
                     has_flags,
-                    ".".join(
-                        return_type.split(".")[:-1]
-                        + [capit(return_type.split(".")[-1])]
-                    ),
-                    docs
+                    ".".join(return_type.split(".")[:-1] + [capit(return_type.split(".")[-1])]),
+                    docs,
                 )
             )
 
@@ -267,10 +254,13 @@ def start():
     total = len(combinators)
     current = 0
     for c in combinators:  # type: Combinator
-        print("Compiling APIs... [{}%] {}".format(
-            str(round(current * 100 / total)).rjust(3),
-            ".".join(filter(None, [c.section, c.namespace, c.name]))
-        ), end="                \r", flush=True)
+        print(
+            "Compiling APIs... [{}%] {}".format(
+                str(round(current * 100 / total)).rjust(3), ".".join(filter(None, [c.section, c.namespace, c.name]))
+            ),
+            end="                \r",
+            flush=True,
+        )
         current += 1
 
         path = "{}/{}/{}".format(DESTINATION, c.section, c.namespace)
@@ -287,13 +277,15 @@ def start():
 
         sorted_args = sort_args(c.args)
 
-        arguments = ", " + ", ".join(
-            [get_argument_type(i) for i in sorted_args if i != ("flags", "#")]
-        ) if c.args else ""
+        arguments = (
+            ", " + ", ".join([get_argument_type(i) for i in sorted_args if i != ("flags", "#")]) if c.args else ""
+        )
 
-        fields = "\n        ".join(
-            ["self.{0} = {0}  # {1}".format(i[0], i[1]) for i in c.args if i != ("flags", "#")]
-        ) if c.args else "pass"
+        fields = (
+            "\n        ".join(["self.{0} = {0}  # {1}".format(i[0], i[1]) for i in c.args if i != ("flags", "#")])
+            if c.args
+            else "pass"
+        )
 
         docstring_args = []
         docs = c.docs.split("|")[1:] if c.docs else None
@@ -313,7 +305,7 @@ def start():
                         arg_name,
                         get_docstring_arg_type(arg_type, is_pyrogram_type=True),
                         ", optional" if "Optional" in docs[i] else "",
-                        re.sub("Optional\. ", "", docs[i].split("§")[1].rstrip(".") + ".")
+                        re.sub("Optional\. ", "", docs[i].split("§")[1].rstrip(".") + "."),
                     )
                 )
             else:
@@ -321,7 +313,7 @@ def start():
                     "{}{}: {}".format(
                         arg_name,
                         " (optional)".format(flag_number) if is_optional else "",
-                        get_docstring_arg_type(arg_type, is_pyrogram_type=c.namespace == "pyrogram")
+                        get_docstring_arg_type(arg_type, is_pyrogram_type=c.namespace == "pyrogram"),
                     )
                 )
 
@@ -353,13 +345,12 @@ def start():
                     flag = FLAGS_RE.match(i[1])
                     if flag:
                         write_flags.append(
-                            "flags |= (1 << {}) if self.{} is not None else 0".format(flag.group(1), i[0]))
+                            "flags |= (1 << {}) if self.{} is not None else 0".format(flag.group(1), i[0])
+                        )
 
-                write_flags = "\n        ".join([
-                    "flags = 0",
-                    "\n        ".join(write_flags),
-                    "b.write(Int(flags))\n        "
-                ])
+                write_flags = "\n        ".join(
+                    ["flags = 0", "\n        ".join(write_flags), "b.write(Int(flags))\n        "]
+                )
 
                 write_types += write_flags
                 read_types += "flags = Int.read(b)\n        "
@@ -400,9 +391,7 @@ def start():
                     write_types += "b.write(self.{}.write())\n        ".format(arg_name)
 
                     read_types += "\n        "
-                    read_types += "{} = Object.read(b) if flags & (1 << {}) else None\n        ".format(
-                        arg_name, index
-                    )
+                    read_types += "{} = Object.read(b) if flags & (1 << {}) else None\n        ".format(arg_name, index)
             else:
                 if arg_type in core_types:
                     write_types += "\n        "
@@ -442,7 +431,7 @@ def start():
                         docstring_args=docstring_args,
                         object_id=c.id,
                         arguments=arguments,
-                        fields=fields
+                        fields=fields,
                     )
                 )
             else:
@@ -456,7 +445,7 @@ def start():
                         fields=fields,
                         read_types=read_types,
                         write_types=write_types,
-                        return_arguments=", ".join([i[0] for i in sorted_args if i != ("flags", "#")])
+                        return_arguments=", ".join([i[0] for i in sorted_args if i != ("flags", "#")]),
                     )
                 )
 
@@ -467,17 +456,17 @@ def start():
 
         for c in combinators:
             path = ".".join(filter(None, [c.section, c.namespace, capit(c.name)]))
-            f.write("\n    {}: \"pyrogram.api.{}\",".format(c.id, path))
+            f.write('\n    {}: "pyrogram.api.{}",'.format(c.id, path))
 
-        f.write("\n    0xbc799737: \"pyrogram.api.core.BoolFalse\",")
-        f.write("\n    0x997275b5: \"pyrogram.api.core.BoolTrue\",")
-        f.write("\n    0x56730bcc: \"pyrogram.api.core.Null\",")
-        f.write("\n    0x1cb5c415: \"pyrogram.api.core.Vector\",")
-        f.write("\n    0x73f1f8dc: \"pyrogram.api.core.MsgContainer\",")
-        f.write("\n    0xae500895: \"pyrogram.api.core.FutureSalts\",")
-        f.write("\n    0x0949d9dc: \"pyrogram.api.core.FutureSalt\",")
-        f.write("\n    0x3072cfa1: \"pyrogram.api.core.GzipPacked\",")
-        f.write("\n    0x5bb8e511: \"pyrogram.api.core.Message\",")
+        f.write('\n    0xbc799737: "pyrogram.api.core.BoolFalse",')
+        f.write('\n    0x997275b5: "pyrogram.api.core.BoolTrue",')
+        f.write('\n    0x56730bcc: "pyrogram.api.core.Null",')
+        f.write('\n    0x1cb5c415: "pyrogram.api.core.Vector",')
+        f.write('\n    0x73f1f8dc: "pyrogram.api.core.MsgContainer",')
+        f.write('\n    0xae500895: "pyrogram.api.core.FutureSalts",')
+        f.write('\n    0x0949d9dc: "pyrogram.api.core.FutureSalt",')
+        f.write('\n    0x3072cfa1: "pyrogram.api.core.GzipPacked",')
+        f.write('\n    0x5bb8e511: "pyrogram.api.core.Message",')
 
         f.write("\n}\n")
 

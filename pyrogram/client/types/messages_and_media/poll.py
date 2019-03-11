@@ -47,15 +47,17 @@ class Poll(PyrogramType):
             The index of your chosen option (in case you voted already), None otherwise.
     """
 
-    def __init__(self,
-                 *,
-                 client: "pyrogram.client.ext.BaseClient",
-                 id: int,
-                 closed: bool,
-                 question: str,
-                 options: List[PollOption],
-                 total_voters: int,
-                 option_chosen: int = None):
+    def __init__(
+        self,
+        *,
+        client: "pyrogram.client.ext.BaseClient",
+        id: int,
+        closed: bool,
+        question: str,
+        options: List[PollOption],
+        total_voters: int,
+        option_chosen: int = None
+    ):
         super().__init__(client)
 
         self.id = id
@@ -84,12 +86,7 @@ class Poll(PyrogramType):
                 if result.chosen:
                     option_chosen = i
 
-            options.append(PollOption(
-                text=answer.text,
-                voters=voters,
-                data=answer.option,
-                client=client
-            ))
+            options.append(PollOption(text=answer.text, voters=voters, data=answer.option, client=client))
 
         return Poll(
             id=poll.id,
@@ -98,5 +95,5 @@ class Poll(PyrogramType):
             options=options,
             total_voters=total_voters,
             option_chosen=option_chosen,
-            client=client
+            client=client,
         )
