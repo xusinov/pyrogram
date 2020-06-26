@@ -13,7 +13,7 @@
         Releases
     </a>
     •
-    <a href="https://t.me/Pyrogram">
+    <a href="https://t.me/kim_ina">
         Community
     </a>
 </p>
